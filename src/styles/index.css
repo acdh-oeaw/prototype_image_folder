@@ -1,0 +1,10 @@
+html,
+body,
+#app {
+	block-size: 100%;
+}
+
+:root {
+	font-family: 'Source Sans Pro', system-ui, sans-serif;
+	font-size: 1.1875rem;
+}
