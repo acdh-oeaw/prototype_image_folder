@@ -2,9 +2,11 @@ html,
 body,
 #app {
 	block-size: 100%;
+	background-color: #f0f0f0;
 }
 
 :root {
 	font-family: 'Source Sans Pro', system-ui, sans-serif;
 	font-size: 1.1875rem;
+	--app-color: #9C27B0;
 }

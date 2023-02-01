@@ -1,8 +1,17 @@
 <script>
 import {defineComponent} from 'vue';
 import {entriesList} from './data'
+import AppHeader from "@/components/AppHeader.vue";
+import SubMenu from "@/components/SubMenu.vue";
+import SubMenuSearch from "@/components/SubMenuSearch.vue";
+
 
 export default defineComponent({
+  components: {
+    SubMenuSearch,
+    AppHeader,
+    SubMenu,
+  },
   data() {
     return {
       selected: {},
@@ -61,81 +70,37 @@ export default defineComponent({
 
 <template>
   <main>
-    <div>
-      <BaseResultBoxSection
-          v-model="visibleBoxes"
-          :is-loading="isLoading"
-          :show-header="showHeader"
-          :showOptions="showOptions"
-          :selected-list.sync="selectedBoxes"
-          :options-button-text="{
-        show: 'Edit/Show Options',
-        hide: 'Return/Hide Options',
-      }"
-          :options-button-icon="{
-        show: 'options-menu',
-        hide: 'remove',
-      }"
-          :box-breakpoints="[
-        [0, 1],
-        [200, 2],
-        [400, 3],
-        [600, 4],
-        [800, 5],
-      ]"
-          :edit-mode.sync="editMode"
-          :selectOptionsText="{
-        selectAll: 'Custom select all',
-        selectNone: 'Custom select none',
-        entriesSelected: {
-          string: !selectedBoxes.length || selectedBoxes.length > 1 ? 'entries selected' : 'entry selected',
-          count: selectedBoxes.length,
-        },
-      }"
-          :expand-text="{
-        expand: 'Custom more objects',
-        collapse: 'Custom collapse',
-      }"
-          :total="visibleBoxes.length"
-          :max-show-more-rows="maxShowMoreRows"
-          :jump-to-top="jumpToTop"
-          :show-action-button-boxes="showActionButtonBoxes"
-          :use-pagination="usePagination"
-          :use-expand-mode="useExpandMode"
-          :max-rows="maxRows"
-          :draggable="draggable"
-          :expanded="!useExpandMode"
-          header-text="This is the header text"
-          @entry-selected="entrySelected"/>
-    </div>
-    <BaseBox>
-      <div class="arrow_left">
-        <BaseIcon
-            :name="icons[7]"
-            :title="icons[7]"
-            class="icon">
-          <span class="title">{{ icon }}</span>
-        </BaseIcon>
-      </div>
-      <div class="arrow_right">
-        <BaseIcon
-            :name="icons[7]"
-            :title="icons[7]"
-            class="icon">
-          <span class="title">{{ icon }}</span>
-        </BaseIcon>
-      </div>
+    <div class="wrapper">
       <div>
+        <AppHeader></AppHeader>
       </div>
-
-    </BaseBox>
+      <div v-if="$route.path !== '/'">
+        <SubMenu></SubMenu>
+      </div>
+      <div v-else>
+        <SubMenuSearch></SubMenuSearch>
+      </div>
+      <RouterView></RouterView>
+    </div>
   </main>
 </template>
 
 <style scoped>
+
 .section-canvas {
   padding: 16px;
   background: rgb(240, 240, 240);
+}
+
+.wrapper {
+  padding: 16px 8px 8px;
+  box-sizing: border-box;
+  display: block;
+  margin: 0 auto;
+  max-width: 1368px;
+  min-width: 305px;
+  position: relative;
+
 }
 
 .result-box {
