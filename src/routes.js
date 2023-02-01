@@ -5,6 +5,6 @@ import AlbumDetailView from "@/components/AlbumDetailView.vue";
 export const routes = [
     { path: '/', component: ImagesOverview },
     { path: '/albums', component: AlbumOverView },
-    { path: '/album', component: AlbumDetailView },
+    { path: '/album/:id', component: AlbumDetailView },
 ]
 

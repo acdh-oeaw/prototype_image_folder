@@ -42,6 +42,7 @@
 <script>
 import draggable from "vuedraggable";
 import {entriesList} from "@/data";
+import {albums} from "@/albums";
 export default {
   components: {
     draggable,
@@ -50,12 +51,10 @@ export default {
     let isDragging = false;
     return {
       images: entriesList,
+      albums,
       isDragging,
     };
   },
-  methods: {
-
-  }
 };
 </script>
 <style scoped>
@@ -80,10 +79,5 @@ export default {
 .box-image {
   object-fit: cover;
 }
-
-
-
-
-
 
 </style>

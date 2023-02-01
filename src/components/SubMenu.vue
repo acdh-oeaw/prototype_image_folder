@@ -10,8 +10,8 @@
       <base-button
           button-style="row"
           text="Arbeitsmappen"
-          @clicked="$router.push('/album')"
-          :active="$route.path === '/album'"
+          @clicked="$router.push('/albums')"
+          :active="$route.path === '/albums'"
       ></base-button>
       <base-button
           class="submenu-item"
