@@ -41,38 +41,6 @@ export const albums = [{
         description: 'Performance',
         source: 'http://base.uni-ak.ac.at/portfolio/taxonomy/album',
         imageUrl: 'https://placeimg.com/460/341/arch',
-    }, {
-        id: 'pCSLggvds3222i8b3lllzRTLM4dJR',
-        date_created: '2020-04-27T11:01:37.246606Z',
-        title: 'humans and rebels',
-        subtext: 'Difference is the key',
-        description: 'Performance & Art',
-        source: 'http://base.uni-ak.ac.at/portfolio/taxonomy/album',
-        imageUrl: 'https://placeimg.com/460/341/tech',
-    }, {
-        id: 'pCSLggvdsi8b3lllz444RTLM4dJR',
-        date_created: '2020-04-27T11:01:37.246606Z',
-        title: 'sword of the stockades',
-        subtext: 'A subtext',
-        description: 'Performance',
-        source: 'http://base.uni-ak.ac.at/portfolio/taxonomy/album',
-        imageUrl: 'https://placeimg.com/460/341/arch',
-    }, {
-        id: 'pCSLggvdsi8b3lllz777RTLM4dJR',
-        date_created: '2020-04-27T11:01:37.246606Z',
-        title: 'origin of freedom',
-        subtext: 'A subtext',
-        description: 'Workshop',
-        source: 'http://base.uni-ak.ac.at/portfolio/taxonomy/album',
-        imageUrl: 'https://placeimg.com/460/341/people',
-    }, {
-        id: 'pCSLggvdsi8b0003lllzRTLM4dJR',
-        date_created: '2020-04-27T11:01:37.246606Z',
-        title: 'escape the demons',
-        subtext: 'A subtext',
-        description: 'Performance',
-        source: 'http://base.uni-ak.ac.at/portfolio/taxonomy/album',
-        imageUrl: 'https://placeimg.com/460/341/animals',
     },]
 }, {
 
@@ -123,5 +91,14 @@ export const albums = [{
             subtext: 'Mysterious',
             text: ['Random text 1', 'Random text 2'],
             imageUrl: 'https://placeimg.com/640/480/any'
-        }],
+        }, {
+            id: 'pCSLggvdsi8b3zRTLM4dJR',
+            date_created: '2020-04-27T11:01:37.246606Z',
+            title: 'spy of the solstice',
+            subtext: 'A different long subtext',
+            description: 'Performance',
+            source: 'http://base.uni-ak.ac.at/portfolio/taxonomy/album',
+            imageUrl: 'https://placeimg.com/460/341/people',
+        },
+        ],
 }]

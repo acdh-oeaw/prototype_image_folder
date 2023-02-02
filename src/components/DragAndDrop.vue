@@ -1,16 +1,25 @@
 <template>
   <main>
-    <div class="drag-drop-wrapper" >
-          <draggable class="draggable-list" :list="images" group="my-group" :animation="300" ...>
-            <div class="list-item" v-for="element in images" v-bind="{ghostClass: 'ghost'}" :key="element.id">
-              <base-image-box class="image-wrapper"
-              :box-size="{ width: 'unset' }"
-              :image-url="element.imageUrl"
-              :title="element.title"
-              :subtext="element.subtext"
-              :description="element.description">
+    <div v-if="album != null">
+      <div class="workfolder-title">
+        <small>Arbeitsmappe</small>
+        <h1 class="title">{{album.title}}</h1>
+      </div>
+      <div>
+        <ButtonMenu></ButtonMenu>
+      </div>
+      <div>
+        <div class="drag-drop-wrapper">
+          <draggable class="draggable-list" :object="album" group="my-group" :animation="300" ...>
+            <div class="list-item" v-for="element in album.items" :key="element.id">
+              <BaseImageBox class="image-wrapper"
+                            :box-size="{ width: 'unset' }"
+                            :image-url="element.imageUrl"
+                            :title="element.title"
+                            :subtext="element.subtext"
+                            :description="element.description">
                 <img class="box-image" :src="element.imageUrl" alt="">
-              </base-image-box>
+              </BaseImageBox>
             </div>
             <base-box-button
                 icon="plus"
@@ -35,29 +44,55 @@
                 class="box">
             </base-box-button>
           </draggable>
-
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <p>Nothing found!</p>
     </div>
   </main>
 </template>
+
 <script>
-import draggable from "vuedraggable";
-import {entriesList} from "@/data";
+import ButtonMenu from "@/components/ButtonMenu.vue";
 import {albums} from "@/albums";
+import draggable from "vuedraggable";
+import BaseSlideBox from "@/components/BaseSlideBox.vue";
+
 export default {
-  components: {
-    draggable,
-  },
+  name: "AlbumDetailView",
+  components: {BaseSlideBox, ButtonMenu, draggable},
   data() {
-    let isDragging = false;
     return {
-      images: entriesList,
       albums,
-      isDragging,
     };
   },
-};
+  computed: {
+    album() {
+      let albumID = Number(this.$route.params.id);
+      return this.albums.find((album) =>  {
+        return album.album_id === albumID
+      })
+    }
+  }
+}
 </script>
+
 <style scoped>
+
+small {
+  color: grey;
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  margin-bottom: 40px;
+}
+
 .draggable-list {
   display: grid;
   justify-content: center;
@@ -79,5 +114,4 @@ export default {
 .box-image {
   object-fit: cover;
 }
-
 </style>

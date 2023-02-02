@@ -14,6 +14,7 @@ Vue.config.productionTip = false
 
 Vue.use(BaseUiComponents)
 
+
 const router = new VueRouter({
   routes, // short for `routes: routes`
   mode: "history",
