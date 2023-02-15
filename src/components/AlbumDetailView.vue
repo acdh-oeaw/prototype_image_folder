@@ -9,14 +9,10 @@
         <ButtonMenu></ButtonMenu>
       </div>
       <div>
-        <div class="drag-drop-wrapper">
           <draggable class="draggable-list" :object="album" group="my-group" :animation="300" ...>
-            <div class="list-item" v-for="element in album.items" :key="element.id">
-              <BaseSlideBox class="image-wrapper"
-                              :slides="element">
-                              :slides="element">
+              <BaseSlideBox v-for="element in album.folder" :key="element.id"
+                              :slides="element.items">
               </BaseSlideBox>
-            </div>
             <base-box-button
                 icon="plus"
                 text="Neues Kunstwerk zur Arbeitsmappe hinzufügen"
@@ -42,7 +38,6 @@
           </draggable>
         </div>
       </div>
-    </div>
     <div v-else>
       <p>Nothing found!</p>
     </div>
@@ -62,6 +57,9 @@ export default {
     return {
       albums,
     };
+  },
+  methods: {
+
   },
   computed: {
     album() {
@@ -97,17 +95,12 @@ small {
 }
 
 .image-wrapper {
-  position: absolute;
   inset: 0;
   width: unset;
-}
-
-.list-item {
   aspect-ratio: 1;
   position: relative;
 }
 
-.box-image {
-  object-fit: cover;
-}
+
+
 </style>
