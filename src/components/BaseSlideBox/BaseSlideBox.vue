@@ -2,6 +2,20 @@
   <BaseBox
       ref="baseBox"
       :box-size="{ width: 'unset' }">
+    <div v-if="slides.length === 1">
+      <draggable id="image-single" :object="slides" group="image1"
+                 :animation="300"
+                 v-for="image in slides" :key="image.id">
+        <SingleImage :content="image"></SingleImage>
+      </draggable>
+    </div>
+    <div v-else-if="slides.length === 2">
+      <draggable class="content-wrapper" :object="slides" :group="{ name: 'image-double', put: false}" ghost-class="moving-content" :animation="300">
+        <div class="image-double" v-for="content in slides" :key="content.id">
+          <DoubleImage :content="content"></DoubleImage>
+        </div>
+      </draggable>
+    </div>
     <div class="options">
       <div class="icon-wrapper arr-right-icon">
         <ArrowRight></ArrowRight>
@@ -13,66 +27,24 @@
         <ArrowLeftRight></ArrowLeftRight>
       </div>
     </div>
-    <div v-if="slides.length === 1">
-      <div class="icon-wrapper info-icon">
-        <Info class="info-icon"></Info>
-      </div>
-      <div class="icon-wrapper trash-icon">
-        <Trash2></Trash2>
-      </div>
-      <draggable id="image-single" :object="slides" group="image1"
-                 :animation="300"
-                 v-for="image in slides" :key="image.id" ...>
-        <BaseImage
-            ref="image"
-            :src="image.imageUrl"
-            :alt="image.title">
-        </BaseImage>
-        <div class="text-wrapper">
-          <div
-              ref="headerBox"
-              :class="['base-image-box-header']">
-            <div
-                :title="image.title"
-                :class="['base-image-box-title']">
-              {{ image.title }}
-            </div>
-            <div
-                :title="image.subtext"
-                class="base-image-box-subtext">
-              {{ image.subtext }}
-            </div>
-          </div>
-        </div>
-      </draggable>
-    </div>
-    <div v-else-if="slides.length === 2">
-      <draggable class="content-wrapper" :object="slides" :group="{ name: 'image-double', put: false}" ghost-class="moving-content" :animation="300">
-        <div class="image-double" v-for="content in slides" :key="content.id">
-          <DoubleImage :content="content"></DoubleImage>
-        </div>
-      </draggable>
-    </div>
   </BaseBox>
 </template>
 
 <script>
-import {Trash2} from "lucide-vue";
 import {ArrowRight} from "lucide-vue";
-import {Info} from "lucide-vue";
 import {ArrowLeft} from "lucide-vue";
 import {ArrowLeftRight} from "lucide-vue";
 import draggable from "vuedraggable";
-import DoubleImage from "@/components/DoubleImage.vue";
+import DoubleImage from "@/components/BaseSlideBox/DoubleImage.vue";
+import SingleImage from "@/components/BaseSlideBox/SingleImage.vue";
 
 export default {
   name: "BaseSlideBox",
   components: {
+    SingleImage,
     DoubleImage,
     draggable,
-    Trash2,
     ArrowRight,
-    Info,
     ArrowLeft,
     ArrowLeftRight,
   },
@@ -111,7 +83,6 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/variables.scss';
 
-
 .content-wrapper {
   display: grid;
   height: 100%;
@@ -147,6 +118,7 @@ export default {
   position: absolute;
   pointer-events: none;
 }
+
 
 .icon-wrapper {
   pointer-events: auto;

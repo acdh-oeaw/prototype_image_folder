@@ -57,7 +57,7 @@
 import ButtonMenu from "@/components/ButtonMenu.vue";
 import {albums} from "@/albums";
 import draggable from "vuedraggable";
-import BaseSlideBox from "@/components/BaseSlideBox.vue";
+import BaseSlideBox from "@/components/BaseSlideBox/BaseSlideBox.vue";
 
 export default {
   name: "AlbumDetailView",
