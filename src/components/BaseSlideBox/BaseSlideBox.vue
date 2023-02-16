@@ -3,6 +3,12 @@
       ref="baseBox"
       :box-size="{ width: 'unset' }">
     <div v-if="slides.length === 1">
+      <div>
+        <div class="drop-zone">
+          <PlaceholderZone :id="this.id + '-0'" :placement="false"></PlaceholderZone>
+          <PlaceholderZone :id="this.id + '-1'" :placement="true"></PlaceholderZone>
+        </div>
+      </div>
       <draggable id="image-single" :object="slides" group="image1"
                  :animation="300"
                  v-for="image in slides" :key="image.id">
@@ -10,8 +16,8 @@
       </draggable>
     </div>
     <div v-else-if="slides.length === 2">
-      <draggable class="content-wrapper" :object="slides" :group="{ name: 'image-double', put: false}" ghost-class="moving-content" :animation="300">
-        <div class="image-double" v-for="content in slides" :key="content.id">
+      <draggable class="content-wrapper" :object="slides" :group="{ name: 'image-double', put: false}" ghost-class="moving-content" :animation="300" @end="onEnd">
+        <div class="image-double" v-for="content in slides" :key="content.id" :id="content.id">
           <DoubleImage :content="content"></DoubleImage>
         </div>
       </draggable>
@@ -37,10 +43,12 @@ import {ArrowLeftRight} from "lucide-vue";
 import draggable from "vuedraggable";
 import DoubleImage from "@/components/BaseSlideBox/DoubleImage.vue";
 import SingleImage from "@/components/BaseSlideBox/SingleImage.vue";
+import PlaceholderZone from "@/components/BaseSlideBox/PlaceholderZone.vue";
 
 export default {
   name: "BaseSlideBox",
   components: {
+    PlaceholderZone,
     SingleImage,
     DoubleImage,
     draggable,
@@ -54,6 +62,7 @@ export default {
      */
     slides: [],
     id: Number,
+    album: [],
   },
   data() {
     const highlight = false;
@@ -64,19 +73,17 @@ export default {
     }
   },
   methods: {
-    checkMove(evt) {
-      if (evt.to.id === "image-single") {
-        this.highlight = true;
-      } else {
-        this.highlight = false;
-      }
-    },
-    endDrag() {
-      this.drag = false;
-      this.highlight = false;
+    onEnd(ev) {
+      console.log("Item id", ev.item.id);
+      console.log("Target id:", ev.explicitOriginalTarget.id)
+      if (ev.explicitOriginalTarget.id === undefined || ev.explicitOriginalTarget.id.length === 0) {
+        const folder = {id: Math.random(), items: [this.slides.find(s => s.id === ev.item.id)]};
+        this.$emit('create-folder', { folder })
+      } else
+      this.$emit('add-to-folder', { folderID: ev.explicitOriginalTarget.id.split("-")[0], item: this.slides.find(s => s.id === ev.item.id), append:  ev.explicitOriginalTarget.id.split("-")[1]})
+      this.$emit('remove-from-folder', { folderID: this.id, item: this.slides.find(s => s.id === ev.item.id) })
     },
   },
-  computed: {},
 }
 </script>
 

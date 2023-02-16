@@ -1,7 +1,7 @@
 export const albums = [{
     album_id: 1,
     title: "Moderne Plastik",
-    folder: [{
+    folders: [{
         id: 1,
         items: [{
             id: 'pCSLggvdsi8vvvb3lllzRTLM4dJR',
@@ -86,7 +86,7 @@ export const albums = [{
     }]}, {
     album_id: 2,
     title: "Impressionismus",
-    folder: [{
+    folders: [{
         id: 1,
         items: [{
             id: 'pCSLggvdsi8vvvb3lllzRTLM4dJR',
@@ -171,7 +171,7 @@ export const albums = [{
 }, {
     album_id: 3,
     title: "Aquarell im späten 18. Jahrhundert",
-    folder: [{
+    folders: [{
         id: 1,
         items: [{
             id: 'pCSLggvdsi8vvvb3lllzRTLM4dJR',
