@@ -4,7 +4,7 @@ export const albums = [{
     folders: [{
         id: 1,
         items: [{
-            id: 'pCSLggvdsi8vvvb3lllzRTLM4dJR',
+            id: '1',
             date_created: '2020-04-27T11:01:37.246606Z',
             title: 'baker without direction',
             subtext: 'A subtext',
@@ -12,7 +12,7 @@ export const albums = [{
             source: 'http://base.uni-ak.ac.at/portfolio/taxonomy/album',
             imageUrl: 'https://placeimg.com/460/341/arch',
         }, {
-            id: 'pCSLggvdsi8b3lllzR4gfTLM4dJR',
+            id: '2',
             date_created: '2020-04-27T11:01:37.246606Z',
             title: 'girl of yesterday',
             subtext: 'A subtext',
@@ -23,7 +23,7 @@ export const albums = [{
     }, {
         id: 2,
         items: [{
-            id: 'pCSLggvdsi8vvvb3lllzRTLM4dJR',
+            id: '3',
             date_created: '2020-04-27T11:01:37.246606Z',
             title: 'baker without direction',
             subtext: 'A subtext',
@@ -31,7 +31,7 @@ export const albums = [{
             source: 'http://base.uni-ak.ac.at/portfolio/taxonomy/album',
             imageUrl: 'https://placeimg.com/460/341/arch',
         }, {
-            id: 'pCSLggvdsi8b3lllzR4gfTLM4dJR',
+            id: '4',
             date_created: '2020-04-27T11:01:37.246606Z',
             title: 'girl of yesterday',
             subtext: 'A subtext',
@@ -43,7 +43,7 @@ export const albums = [{
         id: 3,
         items: [
             {
-                id: 'pCSLggvdsi8b3123lllzRTLM4dJR',
+                id: '5',
                 date_created: '2020-04-27T11:01:37.246606Z',
                 title: 'bandits of nightmares',
                 subtext: 'A subtext',
@@ -55,7 +55,7 @@ export const albums = [{
         id: 4,
         items: [
             {
-                id: 'pCSLggvdsi8b3123lllzRTLM4dJR',
+                id: '6',
                 date_created: '2020-04-27T11:01:37.246606Z',
                 title: 'bandits of nightmares',
                 subtext: 'A subtext',
@@ -67,7 +67,7 @@ export const albums = [{
         id: 5,
         items: [
             {
-                id: 'pCSLggvdsi8b3l323llzRTLM4dJR',
+                id: '7',
                 date_created: '2020-04-27T11:01:37.246606Z',
                 title: 'traitors of the sea',
                 subtext: 'A subtext',
@@ -75,7 +75,7 @@ export const albums = [{
                 source: 'http://base.uni-ak.ac.at/portfolio/taxonomy/album',
                 imageUrl: 'https://placeimg.com/460/341/animals',
             }, {
-                id: 'pCSLggvdsi8b3lllzRTfgsdfgggggLM4dJR',
+                id: '8',
                 date_created: '2020-04-27T11:01:37.246606Z',
                 title: 'officers and descendants',
                 subtext: 'A subtext',

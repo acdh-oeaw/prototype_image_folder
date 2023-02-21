@@ -1,12 +1,26 @@
 <template>
-<div :class="{'image-wrapper': true, 'right': placement}" :id="id">
+<div :class="{'image-wrapper': true, 'right': placement, 'drag-drop-overlay': isVisible}" :id="id" @dragenter="onDragEnter" @dragleave="onDragLeave">
 </div>
 </template>
 
 <script>
 export default {
   name: "PlaceholderZone",
-  props: ['id', 'placement']
+  props: ['id', 'placement'],
+  data() {
+    let isVisible = false;
+    return {
+      isVisible,
+    }
+  },
+  methods: {
+    onDragEnter() {
+      this.isVisible = true;
+    },
+    onDragLeave() {
+      this.isVisible = false;
+    }
+  }
 }
 </script>
 
@@ -20,11 +34,22 @@ export default {
   position: absolute;
   background: rgba(0,0,0, 0.0);
 }
-.image-wrapper:-moz-drag-over{
-  background: rgba(0,0,0, 0.2);
+
+.image-wrapper.drag-drop-overlay{
+  border-color: grey;
+  border-style: dashed;
+  background: rgba(255,255,255, 0.7);
 }
+
 .image-wrapper.right{
   left: 50%;
+}
+
+div#text-node {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  transition: font-size 175ms;
 }
 
 </style>

@@ -9,7 +9,7 @@
         <ButtonMenu></ButtonMenu>
       </div>
       <div>
-        <draggable class="draggable-list" :object="album" group="my-group" :animation="300" @end="onDrop">
+        <draggable class="draggable-list" :object="album" group="my-group" :animation="300">
           <BaseSlideBox v-for="element in album.folders" :key="element.id"
                         :slides="element.items"
                         :id="element.id"
@@ -70,7 +70,7 @@ export default {
       this.album.folders.push(ev.folder);
     },
     onAddToFolder(ev) {
-      console.log(ev, this.album.folders)
+      console.log("on Add", ev, this.album.folders)
       let targetFolder = this.album.folders.find(f => f.id === +ev.folderID);
       if(+ev.append === 1){
         targetFolder.items.push(ev.item)
@@ -81,9 +81,11 @@ export default {
       console.log(ev)
     },
     onRemoveFromFolder(ev) {
-      console.log(ev, this.album.folders)
+      console.log("on Remove", ev, this.album.folders)
       let targetFolder = this.album.folders.find(f => f.id === +ev.folderID);
-      let itemID = targetFolder.items.findIndex(i => i.id === +ev.item.id)
+      console.log("Folder Items", targetFolder.items, "ev.item.id", +ev.item.id);
+      let itemID = targetFolder.items.findIndex(i => i.id === ev.item.id);
+      console.log("ItemID", itemID)
       targetFolder.items.splice(itemID, 1)
       console.log(ev)
     },
