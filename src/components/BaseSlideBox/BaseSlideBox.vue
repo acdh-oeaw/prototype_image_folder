@@ -5,8 +5,8 @@
     <div v-if="slides.length === 1">
       <div>
         <div class="drop-zone">
-          <PlaceholderZone :id="this.id + '-0'" :placement="false"></PlaceholderZone>
-          <PlaceholderZone :id="this.id + '-1'" :placement="true"></PlaceholderZone>
+          <PlaceholderZone :id="this.id + '-0'" :placement="false" :dragStartElement="currentFolderElement"></PlaceholderZone>
+          <PlaceholderZone :id="this.id + '-1'" :placement="true" :dragStartElement="currentFolderElement"></PlaceholderZone>
         </div>
       </div>
       <draggable id="image-single" :object="slides" group="image1"
@@ -23,13 +23,13 @@
       </draggable>
     </div>
     <div class="options">
-      <div class="icon-wrapper arr-right-icon">
+      <div class="icon-wrapper arr-right-icon" @click="positionRight">
         <ArrowRight></ArrowRight>
       </div>
-      <div class="icon-wrapper arr-left-icon">
+      <div class="icon-wrapper arr-left-icon" @click="positionLeft">
         <ArrowLeft></ArrowLeft>
       </div>
-      <div v-if="slides.length === 2" class="icon-wrapper arr-double-icon">
+      <div v-if="slides.length === 2" class="icon-wrapper arr-double-icon" @click="positionSwap">
         <ArrowLeftRight></ArrowLeftRight>
       </div>
     </div>
@@ -62,7 +62,7 @@ export default {
      */
     slides: [],
     id: Number,
-    album: [],
+    currentFolderElement: String,
   },
   data() {
     const highlight = false;
@@ -74,14 +74,22 @@ export default {
   },
   methods: {
     onEnd(ev) {
-      console.log("Item id", ev.item.id);
-      console.log("Target id:", ev.explicitOriginalTarget.id)
       if (ev.explicitOriginalTarget.id === undefined || ev.explicitOriginalTarget.id.length === 0) {
         const folder = {id: Math.random(), items: [this.slides.find(s => s.id === ev.item.id)]};
         this.$emit('create-folder', { folder })
       } else
       this.$emit('add-to-folder', { folderID: ev.explicitOriginalTarget.id.split("-")[0], item: this.slides.find(s => s.id === ev.item.id), append:  ev.explicitOriginalTarget.id.split("-")[1]})
       this.$emit('remove-from-folder', { folderID: this.id, item: this.slides.find(s => s.id === ev.item.id) })
+    },
+    positionSwap() {
+      this.$emit('position-swap', { folderID: this.id })
+    },
+    positionLeft() {
+      this.$emit('position-left', { folderID: this.id })
+    },
+    positionRight() {
+      this.$emit('position-right', { folderID: this.id })
+
     },
   },
 }

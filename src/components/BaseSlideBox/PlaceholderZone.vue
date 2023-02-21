@@ -6,7 +6,7 @@
 <script>
 export default {
   name: "PlaceholderZone",
-  props: ['id', 'placement'],
+  props: ['id', 'placement', 'dragStartElement'],
   data() {
     let isVisible = false;
     return {
@@ -14,8 +14,11 @@ export default {
     }
   },
   methods: {
-    onDragEnter() {
-      this.isVisible = true;
+    onDragEnter(event) {
+      console.log("Placeholder, DragEnter: ", event);
+      if(this.dragStartElement === "")  {
+        this.isVisible = false
+      } else this.isVisible = true;
     },
     onDragLeave() {
       this.isVisible = false;
