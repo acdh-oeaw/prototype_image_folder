@@ -14,8 +14,7 @@ export default {
     }
   },
   methods: {
-    onDragEnter(event) {
-      console.log("Placeholder, DragEnter: ", event);
+    onDragEnter() {
       if(this.dragStartElement === "")  {
         this.isVisible = false
       } else this.isVisible = true;

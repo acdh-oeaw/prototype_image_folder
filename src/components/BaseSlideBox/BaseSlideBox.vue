@@ -12,11 +12,11 @@
       <draggable id="image-single" :object="slides" group="image1"
                  :animation="300"
                  v-for="image in slides" :key="image.id">
-        <SingleImage :content="image"></SingleImage>
+        <SingleImage :content="image" :folderID="id"></SingleImage>
       </draggable>
     </div>
     <div v-else-if="slides.length === 2">
-      <draggable class="content-wrapper" :object="slides" :group="{ name: 'image-double', put: false}" ghost-class="moving-content" :animation="300" @end="onEnd">
+      <draggable class="content-wrapper" :object="slides" :group="{ name: 'image-double', put: false}" ghost-class="moving-content" :animation="300" @start="onStart" @end="onEnd">
         <div class="image-double" v-for="content in slides" :key="content.id" :id="content.id">
           <DoubleImage :content="content"></DoubleImage>
         </div>
@@ -73,8 +73,17 @@ export default {
     }
   },
   methods: {
+    onStart(ev) {
+      console.log(this.id)
+      console.log(ev)
+    },
     onEnd(ev) {
-      if (ev.explicitOriginalTarget.id === undefined || ev.explicitOriginalTarget.id.length === 0) {
+      console.log(this.id);
+      console.log(ev.explicitOriginalTarget.id)
+      if (ev.explicitOriginalTarget.id === "") {
+        console.log("RETURN, switch double image")
+        return;
+      } else if (ev.explicitOriginalTarget.id === undefined || ev.explicitOriginalTarget.id == null) {
         const folder = {id: Math.random(), items: [this.slides.find(s => s.id === ev.item.id)]};
         this.$emit('create-folder', { folder })
       } else

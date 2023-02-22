@@ -9,7 +9,7 @@
         <ButtonMenu></ButtonMenu>
       </div>
       <div @dragstart="onDragStart">
-        <draggable class="draggable-list" :object="album" group="my-group" :animation="300">
+        <draggable class="draggable-list" :object="album" group="my-group" :animation="300" v-bind="dragOptions">
           <BaseSlideBox v-for="element in album.folders" :key="element.id"
                         :slides="element.items"
                         :id="element.id"
@@ -71,15 +71,17 @@ export default {
   },
   methods: {
     onDragStart(event) {
-      console.log("DragStart: ", event.srcElement.id);
+      console.log("DragStart: ", event);
       this.currentFolderElement = event.srcElement.id;
     },
 
     onCreateFolder(ev) {
+      console.log("CREATE")
       this.album.folders.push(ev.folder);
     },
 
     onAddToFolder(ev) {
+      console.log("ADD")
       let targetFolder = this.album.folders.find(f => f.id === +ev.folderID);
       if(+ev.append === 1){
         targetFolder.items.push(ev.item)
@@ -89,10 +91,10 @@ export default {
     },
 
     onRemoveFromFolder(ev) {
+      console.log("REMOVE")
       let targetFolder = this.album.folders.find(f => f.id === +ev.folderID);
       let itemID = targetFolder.items.findIndex(i => i.id === ev.item.id);
       targetFolder.items.splice(itemID, 1)
-      console.log(ev)
     },
 
     positionSwap(ev) {
@@ -138,7 +140,12 @@ export default {
       return this.albums.find((album) => {
         return album.album_id === albumID
       })
-    }
+    },
+    dragOptions() {
+      return {
+        ghostClass: "ghost"
+      };
+    },
   }
 }
 </script>
@@ -170,6 +177,10 @@ small {
   width: unset;
   aspect-ratio: 1;
   position: relative;
+}
+
+.ghost {
+  opacity: 0.3;
 }
 
 

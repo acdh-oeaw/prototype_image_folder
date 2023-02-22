@@ -51,6 +51,8 @@
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
-    "rules": {}
+    "rules": {
+      "no-debugger": "warn"
+    }
   }
 }
