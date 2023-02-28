@@ -1,22 +1,34 @@
 <template>
-  <BaseBox
-      ref="baseBox"
-      :box-size="{ width: 'unset' }">
+  <BaseBox ref="baseBox" :box-size="{ width: 'unset' }">
     <div v-if="slides.length === 1">
       <div>
         <div class="drop-zone">
-          <PlaceholderZone :id="this.id + '-0'" :placement="false" :dragStartElement="currentFolderElement"></PlaceholderZone>
-          <PlaceholderZone :id="this.id + '-1'" :placement="true" :dragStartElement="currentFolderElement"></PlaceholderZone>
+          <PlaceholderZone
+            :id="this.id + '-0'"
+            :placement="false"
+            :dragStartElement="currentFolderElement"
+          ></PlaceholderZone>
+          <PlaceholderZone
+            :id="this.id + '-1'"
+            :placement="true"
+            :dragStartElement="currentFolderElement"
+          ></PlaceholderZone>
         </div>
       </div>
-      <draggable id="image-single" :object="slides" group="image1"
-                 :animation="300"
-                 v-for="image in slides" :key="image.id">
-        <SingleImage :content="image" :folderID="id"></SingleImage>
+      <draggable id="image-single" :object="slides" group="image1" :animation="300">
+        <SingleImage :content="image" :folderID="id" v-for="image in slides" :key="image.id"></SingleImage>
       </draggable>
     </div>
     <div v-else-if="slides.length === 2">
-      <draggable class="content-wrapper" :object="slides" :group="{ name: 'image-double', put: false}" ghost-class="moving-content" :animation="300" @start="onStart" @end="onEnd">
+      <draggable
+        class="content-wrapper"
+        :object="slides"
+        :group="{ name: 'image-double', put: false }"
+        ghost-class="moving-content"
+        :animation="300"
+        @start="onStart"
+        @end="onEnd"
+      >
         <div class="image-double" v-for="content in slides" :key="content.id" :id="content.id">
           <DoubleImage :content="content"></DoubleImage>
         </div>
@@ -37,16 +49,16 @@
 </template>
 
 <script>
-import {ArrowRight} from "lucide-vue";
-import {ArrowLeft} from "lucide-vue";
-import {ArrowLeftRight} from "lucide-vue";
-import draggable from "vuedraggable";
-import DoubleImage from "@/components/BaseSlideBox/DoubleImage.vue";
-import SingleImage from "@/components/BaseSlideBox/SingleImage.vue";
-import PlaceholderZone from "@/components/BaseSlideBox/PlaceholderZone.vue";
+import { ArrowRight } from 'lucide-vue';
+import { ArrowLeft } from 'lucide-vue';
+import { ArrowLeftRight } from 'lucide-vue';
+import draggable from 'vuedraggable';
+import DoubleImage from '@/components/BaseSlideBox/DoubleImage.vue';
+import SingleImage from '@/components/BaseSlideBox/SingleImage.vue';
+import PlaceholderZone from '@/components/BaseSlideBox/PlaceholderZone.vue';
 
 export default {
-  name: "BaseSlideBox",
+  name: 'BaseSlideBox',
   components: {
     PlaceholderZone,
     SingleImage,
@@ -70,38 +82,51 @@ export default {
     return {
       highlight,
       drag,
-    }
+    };
   },
   methods: {
     onStart(ev) {
-      console.log(this.id)
-      console.log(ev)
+      console.log(this.id);
+      console.log(ev);
     },
     onEnd(ev) {
       console.log(this.id);
-      console.log(ev.explicitOriginalTarget.id)
-      if (ev.explicitOriginalTarget.id === "") {
-        console.log("RETURN, switch double image")
+      console.log(ev);
+      let draggedElement = ev.item;
+      let targetElement = ev.explicitOriginalTarget;
+      if (!targetElement) {
+        targetElement = ev.originalEvent.toElement;
+      }
+      console.log(draggedElement);
+      console.log(targetElement);
+      if (targetElement.id === '') {
+        console.log('RETURN, switch double image');
         return;
-      } else if (ev.explicitOriginalTarget.id === undefined || ev.explicitOriginalTarget.id == null) {
-        const folder = {id: Math.random(), items: [this.slides.find(s => s.id === ev.item.id)]};
-        this.$emit('create-folder', { folder })
+      } else if (draggedElement.id === undefined || draggedElement.id == null) {
+        const folder = { id: Math.random(), items: [this.slides.find((s) => s.id === draggedElement.id)] };
+        this.$emit('create-folder', { folder });
       } else
-      this.$emit('add-to-folder', { folderID: ev.explicitOriginalTarget.id.split("-")[0], item: this.slides.find(s => s.id === ev.item.id), append:  ev.explicitOriginalTarget.id.split("-")[1]})
-      this.$emit('remove-from-folder', { folderID: this.id, item: this.slides.find(s => s.id === ev.item.id) })
+        this.$emit('add-to-folder', {
+          folderID: targetElement.id.split('-')[0],
+          item: this.slides.find((s) => s.id === draggedElement.id),
+          append: targetElement.id.split('-')[1],
+        });
+      this.$emit('remove-from-folder', {
+        folderID: this.id,
+        item: this.slides.find((s) => s.id === draggedElement.id),
+      });
     },
     positionSwap() {
-      this.$emit('position-swap', { folderID: this.id })
+      this.$emit('position-swap', { folderID: this.id });
     },
     positionLeft() {
-      this.$emit('position-left', { folderID: this.id })
+      this.$emit('position-left', { folderID: this.id });
     },
     positionRight() {
-      this.$emit('position-right', { folderID: this.id })
-
+      this.$emit('position-right', { folderID: this.id });
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -111,7 +136,6 @@ export default {
   display: grid;
   height: 100%;
   grid-template-columns: 1fr 1fr;
-
 }
 
 .image-double {
@@ -134,7 +158,6 @@ export default {
   width: 100%;
 }
 
-
 .options {
   display: flex;
   width: 100%;
@@ -142,7 +165,6 @@ export default {
   position: absolute;
   pointer-events: none;
 }
-
 
 .icon-wrapper {
   pointer-events: auto;
@@ -160,7 +182,7 @@ export default {
   cursor: pointer;
 
   &:hover {
-    color: #9C27B0;
+    color: #9c27b0;
   }
 
   &.trash-icon {
@@ -188,9 +210,7 @@ export default {
     right: 50%;
     bottom: 43%;
   }
-
 }
-
 
 .image-single {
   object-fit: cover;
@@ -203,9 +223,7 @@ export default {
     width: 100%;
     object-fit: cover;
   }
-
 }
-
 
 .text-wrapper {
   overflow: hidden;
@@ -264,7 +282,5 @@ export default {
   &-shadow-large {
     box-shadow: $box-shadow-edit;
   }
-
 }
-
 </style>
