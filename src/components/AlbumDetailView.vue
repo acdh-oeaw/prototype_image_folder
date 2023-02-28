@@ -9,8 +9,9 @@
         <ButtonMenu></ButtonMenu>
       </div>
       <div @dragstart="onDragStart">
-        <draggable class="draggable-list" :object="album" group="my-group" :animation="300" v-bind="dragOptions">
-          <BaseSlideBox v-for="element in album.folders" :key="element.id"
+        <div class="draggable-list">
+          <div class="drop-zone-wrapper" v-for="element in album.folders" :key="element.id" :id="element.id">
+          <BaseSlideBox
                         :slides="element.items"
                         :id="element.id"
                         @create-folder="onCreateFolder"
@@ -19,8 +20,10 @@
                         @split-images="splitImages"
                         @position-left="positionLeft"
                         @position-right="positionRight"
-                        :currentFolderElement="currentFolderElement">
+                        :currentFolderElement="currentFolderElement" >
           </BaseSlideBox>
+            <DropZoneLine :dragStartElement="currentFolderElement"></DropZoneLine>
+          </div>
           <base-box-button
               icon="plus"
               text="Neues Kunstwerk zur Arbeitsmappe hinzufügen"
@@ -43,7 +46,7 @@
               :box-size="{ width: 'unset' }"
               class="box">
           </base-box-button>
-        </draggable>
+        </div>
       </div>
     </div>
     <div v-else>
@@ -55,12 +58,12 @@
 <script>
 import ButtonMenu from "@/components/ButtonMenu.vue";
 import {albums} from "@/albums";
-import draggable from "vuedraggable";
 import BaseSlideBox from "@/components/BaseSlideBox/BaseSlideBox.vue";
+import DropZoneLine from "@/components/BaseSlideBox/DropZoneLine.vue";
 
 export default {
   name: "AlbumDetailView",
-  components: {BaseSlideBox, ButtonMenu, draggable},
+  components: {DropZoneLine, BaseSlideBox, ButtonMenu},
   emits: ['create-folder', 'add-to-folder', 'remove-from-folder', 'split-images', 'position-left', 'position-right'],
   data() {
     let currentFolderElement;
@@ -81,7 +84,7 @@ export default {
     },
 
     onAddToFolder(ev) {
-      console.log("ADD")
+      console.log("ADD", ev)
       let targetFolder = this.album.folders.find(f => f.id === +ev.folderID);
       if(+ev.append === 1){
         targetFolder.items.push(ev.item)
@@ -91,10 +94,14 @@ export default {
     },
 
     onRemoveFromFolder(ev) {
-      console.log("REMOVE")
+      console.log("REMOVE", ev)
       let targetFolder = this.album.folders.find(f => f.id === +ev.folderID);
       let itemID = targetFolder.items.findIndex(i => i.id === ev.item.id);
+      let folderIndex = this.album.folders.findIndex(i => i.id === targetFolder.id)
       targetFolder.items.splice(itemID, 1)
+      if(targetFolder.items.length === 0) {
+        this.album.folders.splice(folderIndex, 1)
+      }
     },
 
     splitImages(ev) {
@@ -160,6 +167,13 @@ export default {
 </script>
 
 <style scoped>
+
+.drop-zone-wrapper {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 100% 15px;
+
+}
 
 small {
   color: grey;

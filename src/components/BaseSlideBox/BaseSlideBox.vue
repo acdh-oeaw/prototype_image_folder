@@ -1,39 +1,45 @@
 <template>
-  <BaseBox
-      ref="baseBox"
-      :box-size="{ width: 'unset' }">
-    <div v-if="slides.length === 1">
-      <div>
-        <div class="drop-zone">
-          <PlaceholderZone :id="this.id + '-0'" :placement="false" :dragStartElement="currentFolderElement"></PlaceholderZone>
-          <PlaceholderZone :id="this.id + '-1'" :placement="true" :dragStartElement="currentFolderElement"></PlaceholderZone>
+  <draggable @start="onStart" @end="onEnd">
+    <BaseBox
+        :id="`${this.id}-${this.slides[0].id}`"
+        ref="baseBox"
+        :box-size="{ width: 'unset' }">
+      <div v-if="slides.length === 1">
+        <div>
+          <div class="drop-zone">
+            <PlaceholderZone :id="this.id + '-0'" :placement="false"
+                             :dragStartElement="currentFolderElement"></PlaceholderZone>
+            <PlaceholderZone :id="this.id + '-1'" :placement="true"
+                             :dragStartElement="currentFolderElement"></PlaceholderZone>
+          </div>
+        </div>
+        <div id="image-single" :object="slides" group="image1"
+                   :animation="300"
+                   v-for="image in slides" :key="image.id">
+          <SingleImage :content="image" :folderID="id"></SingleImage>
         </div>
       </div>
-      <draggable id="image-single" :object="slides" group="image1"
-                 :animation="300"
-                 v-for="image in slides" :key="image.id">
-        <SingleImage :content="image" :folderID="id"></SingleImage>
-      </draggable>
-    </div>
-    <div v-else-if="slides.length === 2">
-      <draggable class="content-wrapper" :object="slides" :group="{ name: 'image-double', put: false}" ghost-class="moving-content" :animation="300" @start="onStart" @end="onEnd">
-        <div class="image-double" v-for="content in slides" :key="content.id" :id="content.id">
-          <DoubleImage :content="content"></DoubleImage>
+      <div v-else-if="slides.length === 2">
+        <div class="content-wrapper" :object="slides" :group="{ name: 'image-double', put: false}"
+             ghost-class="moving-content" :animation="300" @start="onStart" @end="onEnd">
+          <div class="image-double" v-for="content in slides" :key="content.id" :id="content.id">
+            <DoubleImage :content="content"></DoubleImage>
+          </div>
         </div>
-      </draggable>
-    </div>
-    <div class="options">
-      <div class="icon-wrapper arr-right-icon" @click="positionRight">
-        <ArrowRight></ArrowRight>
       </div>
-      <div class="icon-wrapper arr-left-icon" @click="positionLeft">
-        <ArrowLeft></ArrowLeft>
+      <div class="options">
+        <div class="icon-wrapper arr-right-icon" @click="positionRight">
+          <ArrowRight></ArrowRight>
+        </div>
+        <div class="icon-wrapper arr-left-icon" @click="positionLeft">
+          <ArrowLeft></ArrowLeft>
+        </div>
+        <div v-if="slides.length === 2" class="icon-wrapper arr-double-icon" @click="splitImages">
+          <SeparatorVertical></SeparatorVertical>
+        </div>
       </div>
-      <div v-if="slides.length === 2" class="icon-wrapper arr-double-icon" @click="splitImages">
-        <SeparatorVertical></SeparatorVertical>
-      </div>
-    </div>
-  </BaseBox>
+    </BaseBox>
+  </draggable>
 </template>
 
 <script>
@@ -79,25 +85,29 @@ export default {
     },
     onEnd(ev) {
       console.log(this.id);
-      console.log(ev.explicitOriginalTarget.id)
-      if (ev.explicitOriginalTarget.id === "") {
-        console.log("RETURN, switch double image")
+      console.log("onEnd Event:", ev, this.slides)
+      if (ev.explicitOriginalTarget.id === "" || ev.explicitOriginalTarget.id === null) {
         return;
-      } else if (ev.explicitOriginalTarget.id === undefined || ev.explicitOriginalTarget.id == null) {
-        const folder = {id: Math.random(), items: [this.slides.find(s => s.id === ev.item.id)]};
-        this.$emit('create-folder', { folder })
-      } else
-      this.$emit('add-to-folder', { folderID: ev.explicitOriginalTarget.id.split("-")[0], item: this.slides.find(s => s.id === ev.item.id), append:  ev.explicitOriginalTarget.id.split("-")[1]})
-      this.$emit('remove-from-folder', { folderID: this.id, item: this.slides.find(s => s.id === ev.item.id) })
+      } else {
+        this.$emit('add-to-folder', {
+          folderID: ev.explicitOriginalTarget.id.split("-")[0],
+          item: this.slides.find(s => s.id === ev.item.id.split("-")[1]),
+          append: ev.explicitOriginalTarget.id.split("-")[1]
+        })
+        this.$emit('remove-from-folder', {
+          folderID: this.id,
+          item: this.slides.find(s => s.id === ev.item.id.split("-")[1])
+        })
+      }
     },
     splitImages() {
-      this.$emit('split-images', { folderID: this.id })
+      this.$emit('split-images', {folderID: this.id})
     },
     positionLeft() {
-      this.$emit('position-left', { folderID: this.id })
+      this.$emit('position-left', {folderID: this.id})
     },
     positionRight() {
-      this.$emit('position-right', { folderID: this.id })
+      this.$emit('position-right', {folderID: this.id})
 
     },
   },

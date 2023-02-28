@@ -15,11 +15,14 @@ export default {
   },
   methods: {
     onDragEnter() {
-      if(this.dragStartElement === "")  {
-        this.isVisible = false
-      } else this.isVisible = true;
+      console.log("placeholderzone entered")
+      if(this.dragStartElement === "" || this.dragStartElement.split("-")[0] === this.id.split("-")[0]) {
+        return;
+      }
+      this.isVisible = true;
     },
     onDragLeave() {
+      console.log("placeholderzone left")
       this.isVisible = false;
     }
   }

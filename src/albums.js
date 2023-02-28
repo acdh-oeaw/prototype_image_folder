@@ -14,22 +14,22 @@ export const albums = [{
         }, {
             id: '2',
             date_created: '2020-04-27T11:01:37.246606Z',
-            title: 'girl of yesterday',
+            title: 'boy of tomorrow',
             subtext: 'A subtext',
             description: 'Performance',
             source: 'http://base.uni-ak.ac.at/portfolio/taxonomy/album',
-            imageUrl: 'https://placeimg.com/460/341/people',
+            imageUrl: 'https://placeimg.com/460/342/people',
         }],
     }, {
         id: 2,
         items: [{
             id: '3',
             date_created: '2020-04-27T11:01:37.246606Z',
-            title: 'baker without direction',
+            title: 'sunlight on rocks',
             subtext: 'A subtext',
             description: 'Collaboration',
             source: 'http://base.uni-ak.ac.at/portfolio/taxonomy/album',
-            imageUrl: 'https://placeimg.com/460/341/arch',
+            imageUrl: 'https://placeimg.com/460/346/arch',
         }, {
             id: '4',
             date_created: '2020-04-27T11:01:37.246606Z',
@@ -45,11 +45,11 @@ export const albums = [{
             {
                 id: '5',
                 date_created: '2020-04-27T11:01:37.246606Z',
-                title: 'bandits of nightmares',
+                title: 'the heart of nights',
                 subtext: 'A subtext',
                 description: 'Article',
                 source: 'http://base.uni-ak.ac.at/portfolio/taxon',
-                imageUrl: 'https://placeimg.com/460/341/tech',
+                imageUrl: 'https://placeimg.com/460/343/tech',
             }],
     }, {
         id: 4,
@@ -81,7 +81,7 @@ export const albums = [{
                 subtext: 'A subtext',
                 description: 'Performance',
                 source: 'http://base.uni-ak.ac.at/portfolio/taxonomy/album',
-                imageUrl: 'https://placeimg.com/460/341/arch',
+                imageUrl: 'https://placeimg.com/460/346/tech',
             }],
     }]}, {
     album_id: 2,
