@@ -194,7 +194,7 @@ export default {
   }
 
   &.arr-double-icon {
-    left: 44%;
+    left: 43.3%;
     right: 50%;
     bottom: 43%;
   }
