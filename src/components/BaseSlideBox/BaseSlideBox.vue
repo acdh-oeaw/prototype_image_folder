@@ -29,8 +29,8 @@
       <div class="icon-wrapper arr-left-icon" @click="positionLeft">
         <ArrowLeft></ArrowLeft>
       </div>
-      <div v-if="slides.length === 2" class="icon-wrapper arr-double-icon" @click="positionSwap">
-        <ArrowLeftRight></ArrowLeftRight>
+      <div v-if="slides.length === 2" class="icon-wrapper arr-double-icon" @click="splitImages">
+        <SeparatorVertical></SeparatorVertical>
       </div>
     </div>
   </BaseBox>
@@ -39,7 +39,7 @@
 <script>
 import {ArrowRight} from "lucide-vue";
 import {ArrowLeft} from "lucide-vue";
-import {ArrowLeftRight} from "lucide-vue";
+import {SeparatorVertical} from "lucide-vue";
 import draggable from "vuedraggable";
 import DoubleImage from "@/components/BaseSlideBox/DoubleImage.vue";
 import SingleImage from "@/components/BaseSlideBox/SingleImage.vue";
@@ -54,7 +54,7 @@ export default {
     draggable,
     ArrowRight,
     ArrowLeft,
-    ArrowLeftRight,
+    SeparatorVertical,
   },
   props: {
     /**
@@ -90,8 +90,8 @@ export default {
       this.$emit('add-to-folder', { folderID: ev.explicitOriginalTarget.id.split("-")[0], item: this.slides.find(s => s.id === ev.item.id), append:  ev.explicitOriginalTarget.id.split("-")[1]})
       this.$emit('remove-from-folder', { folderID: this.id, item: this.slides.find(s => s.id === ev.item.id) })
     },
-    positionSwap() {
-      this.$emit('position-swap', { folderID: this.id })
+    splitImages() {
+      this.$emit('split-images', { folderID: this.id })
     },
     positionLeft() {
       this.$emit('position-left', { folderID: this.id })

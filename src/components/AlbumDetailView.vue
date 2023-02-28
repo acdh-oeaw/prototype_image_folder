@@ -16,7 +16,7 @@
                         @create-folder="onCreateFolder"
                         @add-to-folder="onAddToFolder"
                         @remove-from-folder="onRemoveFromFolder"
-                        @position-swap="positionSwap"
+                        @split-images="splitImages"
                         @position-left="positionLeft"
                         @position-right="positionRight"
                         :currentFolderElement="currentFolderElement">
@@ -61,7 +61,7 @@ import BaseSlideBox from "@/components/BaseSlideBox/BaseSlideBox.vue";
 export default {
   name: "AlbumDetailView",
   components: {BaseSlideBox, ButtonMenu, draggable},
-  emits: ['create-folder', 'add-to-folder', 'remove-from-folder', 'position-swap', 'position-left', 'position-right'],
+  emits: ['create-folder', 'add-to-folder', 'remove-from-folder', 'split-images', 'position-left', 'position-right'],
   data() {
     let currentFolderElement;
     return {
@@ -97,11 +97,20 @@ export default {
       targetFolder.items.splice(itemID, 1)
     },
 
-    positionSwap(ev) {
+    splitImages(ev) {
       console.log(ev)
       let targetFolder = this.album.folders.find(f => f.id === +ev.folderID);
-      targetFolder.items.reverse();
+      console.log(targetFolder)
+      let folderIndex = this.album.folders.findIndex(f => f.id === +ev.folderID)
+      console.log(folderIndex)
+      let image1 = targetFolder.items[0];
+      let image2 = targetFolder.items[1];
 
+      const folder = {id: Math.random(), items: [image1]};
+      const folder2 = {id: Math.random(), items: [image2]};
+
+      this.album.folders.splice(folderIndex,1)
+      this.album.folders.splice(folderIndex, 0, folder, folder2);
     },
 
     positionLeft(ev) {
