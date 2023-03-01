@@ -51,16 +51,16 @@
 </template>
 
 <script>
-import { ArrowRight } from 'lucide-vue';
-import { ArrowLeft } from 'lucide-vue';
-import { SeparatorVertical } from 'lucide-vue';
-import draggable from 'vuedraggable';
-import DoubleImage from '@/components/BaseSlideBox/DoubleImage.vue';
-import SingleImage from '@/components/BaseSlideBox/SingleImage.vue';
-import PlaceholderZone from '@/components/BaseSlideBox/PlaceholderZone.vue';
+import { ArrowRight } from "lucide-vue";
+import { ArrowLeft } from "lucide-vue";
+import { SeparatorVertical } from "lucide-vue";
+import draggable from "vuedraggable";
+import DoubleImage from "@/components/BaseSlideBox/DoubleImage.vue";
+import SingleImage from "@/components/BaseSlideBox/SingleImage.vue";
+import PlaceholderZone from "@/components/BaseSlideBox/PlaceholderZone.vue";
 
 export default {
-  name: 'BaseSlideBox',
+  name: "BaseSlideBox",
   components: {
     PlaceholderZone,
     SingleImage,
@@ -93,41 +93,47 @@ export default {
     },
     onEnd(ev) {
       console.log(this.id);
-      console.log('onEnd Event:', ev, this.slides);
+      console.log("onEnd Event:", ev, this.slides);
       let draggedElement = ev.item;
       let targetElement = ev.explicitOriginalTarget;
       if (!targetElement) {
         targetElement = ev.originalEvent.toElement;
       }
-      if (targetElement.id === '' || targetElement.id === null) {
+      console.log("Target ", targetElement);
+      if (targetElement.id === "" || targetElement.id === null) {
         return;
-      } else {
-        this.$emit('add-to-folder', {
-          folderID: targetElement.id.split('-')[0],
-          item: this.slides.find((s) => s.id === draggedElement.id.split('-')[1]),
-          append: targetElement.id.split('-')[1],
-        });
-        this.$emit('remove-from-folder', {
+      } else if (targetElement.id.startsWith("dropZoneLine")) {
+        this.$emit("reorder-folder", {
           folderID: this.id,
-          item: this.slides.find((s) => s.id === draggedElement.id.split('-')[1]),
+          newIndex: +targetElement.id.replace("dropZoneLine-", ""),
+        });
+      } else {
+        this.$emit("add-to-folder", {
+          folderID: targetElement.id.split("-")[0],
+          item: this.slides.find((s) => s.id === draggedElement.id.split("-")[1]),
+          append: targetElement.id.split("-")[1],
+        });
+        this.$emit("remove-from-folder", {
+          folderID: this.id,
+          item: this.slides.find((s) => s.id === draggedElement.id.split("-")[1]),
         });
       }
     },
     splitImages() {
-      this.$emit('split-images', { folderID: this.id });
+      this.$emit("split-images", { folderID: this.id });
     },
     positionLeft() {
-      this.$emit('position-left', { folderID: this.id });
+      this.$emit("position-left", { folderID: this.id });
     },
     positionRight() {
-      this.$emit('position-right', { folderID: this.id });
+      this.$emit("position-right", { folderID: this.id });
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
+@import "@/styles/variables.scss";
 
 .content-wrapper {
   display: grid;
