@@ -15,11 +15,14 @@ export default {
   },
   methods: {
     onDragEnter() {
-      if(this.dragStartElement === "")  {
-        this.isVisible = false
-      } else this.isVisible = true;
+      console.log("placeholderzone entered")
+      if(this.dragStartElement === "" || this.dragStartElement.split("-")[0] === this.id.split("-")[0]) {
+        return;
+      }
+      this.isVisible = true;
     },
     onDragLeave() {
+      console.log("placeholderzone left")
       this.isVisible = false;
     }
   }
@@ -38,20 +41,30 @@ export default {
 }
 
 .image-wrapper.drag-drop-overlay{
-  border-color: grey;
-  border-style: dashed;
-  background: rgba(255,255,255, 0.7);
+    border: 3px solid;
+    color: #9C27B0;
+    background: rgba(255, 255, 255, 0.7);
+    transition: all 0.2s ease-in-out;
+}
+
+.image-wrapper.drag-drop-overlay:hover {
+  animation: linearGradientMove .3s infinite linear;
+}
+
+@keyframes linearGradientMove {
+  100% {
+    background-position: 4px 0, -4px 100%, 0 -4px, 100% 4px;
+  }
 }
 
 .image-wrapper.right{
   left: 50%;
 }
 
-div#text-node {
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
-  transition: font-size 175ms;
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
 }
 
 </style>

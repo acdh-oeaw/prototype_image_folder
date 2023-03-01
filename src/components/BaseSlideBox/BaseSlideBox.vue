@@ -1,57 +1,59 @@
 <template>
-  <BaseBox ref="baseBox" :box-size="{ width: 'unset' }">
-    <div v-if="slides.length === 1">
-      <div>
-        <div class="drop-zone">
-          <PlaceholderZone
-            :id="this.id + '-0'"
-            :placement="false"
-            :dragStartElement="currentFolderElement"
-          ></PlaceholderZone>
-          <PlaceholderZone
-            :id="this.id + '-1'"
-            :placement="true"
-            :dragStartElement="currentFolderElement"
-          ></PlaceholderZone>
+  <draggable @start="onStart" @end="onEnd">
+    <BaseBox :id="`${this.id}-${this.slides[0].id}`" ref="baseBox" :box-size="{ width: 'unset' }">
+      <div v-if="slides.length === 1">
+        <div>
+          <div class="drop-zone">
+            <PlaceholderZone
+              :id="this.id + '-0'"
+              :placement="false"
+              :dragStartElement="currentFolderElement"
+            ></PlaceholderZone>
+            <PlaceholderZone
+              :id="this.id + '-1'"
+              :placement="true"
+              :dragStartElement="currentFolderElement"
+            ></PlaceholderZone>
+          </div>
+        </div>
+        <div id="image-single" :object="slides" group="image1" :animation="300" v-for="image in slides" :key="image.id">
+          <SingleImage :content="image" :folderID="id"></SingleImage>
         </div>
       </div>
-      <draggable id="image-single" :object="slides" group="image1" :animation="300">
-        <SingleImage :content="image" :folderID="id" v-for="image in slides" :key="image.id"></SingleImage>
-      </draggable>
-    </div>
-    <div v-else-if="slides.length === 2">
-      <draggable
-        class="content-wrapper"
-        :object="slides"
-        :group="{ name: 'image-double', put: false }"
-        ghost-class="moving-content"
-        :animation="300"
-        @start="onStart"
-        @end="onEnd"
-      >
-        <div class="image-double" v-for="content in slides" :key="content.id" :id="content.id">
-          <DoubleImage :content="content"></DoubleImage>
+      <div v-else-if="slides.length === 2">
+        <div
+          class="content-wrapper"
+          :object="slides"
+          :group="{ name: 'image-double', put: false }"
+          ghost-class="moving-content"
+          :animation="300"
+          @start="onStart"
+          @end="onEnd"
+        >
+          <div class="image-double" v-for="content in slides" :key="content.id" :id="content.id">
+            <DoubleImage :content="content"></DoubleImage>
+          </div>
         </div>
-      </draggable>
-    </div>
-    <div class="options">
-      <div class="icon-wrapper arr-right-icon" @click="positionRight">
-        <ArrowRight></ArrowRight>
       </div>
-      <div class="icon-wrapper arr-left-icon" @click="positionLeft">
-        <ArrowLeft></ArrowLeft>
+      <div class="options">
+        <div class="icon-wrapper arr-right-icon" @click="positionRight">
+          <ArrowRight></ArrowRight>
+        </div>
+        <div class="icon-wrapper arr-left-icon" @click="positionLeft">
+          <ArrowLeft></ArrowLeft>
+        </div>
+        <div v-if="slides.length === 2" class="icon-wrapper arr-double-icon" @click="splitImages">
+          <SeparatorVertical></SeparatorVertical>
+        </div>
       </div>
-      <div v-if="slides.length === 2" class="icon-wrapper arr-double-icon" @click="positionSwap">
-        <ArrowLeftRight></ArrowLeftRight>
-      </div>
-    </div>
-  </BaseBox>
+    </BaseBox>
+  </draggable>
 </template>
 
 <script>
 import { ArrowRight } from 'lucide-vue';
 import { ArrowLeft } from 'lucide-vue';
-import { ArrowLeftRight } from 'lucide-vue';
+import { SeparatorVertical } from 'lucide-vue';
 import draggable from 'vuedraggable';
 import DoubleImage from '@/components/BaseSlideBox/DoubleImage.vue';
 import SingleImage from '@/components/BaseSlideBox/SingleImage.vue';
@@ -66,7 +68,7 @@ export default {
     draggable,
     ArrowRight,
     ArrowLeft,
-    ArrowLeftRight,
+    SeparatorVertical,
   },
   props: {
     /**
@@ -91,33 +93,28 @@ export default {
     },
     onEnd(ev) {
       console.log(this.id);
-      console.log(ev);
+      console.log('onEnd Event:', ev, this.slides);
       let draggedElement = ev.item;
       let targetElement = ev.explicitOriginalTarget;
       if (!targetElement) {
         targetElement = ev.originalEvent.toElement;
       }
-      console.log(draggedElement);
-      console.log(targetElement);
-      if (targetElement.id === '') {
-        console.log('RETURN, switch double image');
+      if (targetElement.id === '' || targetElement.id === null) {
         return;
-      } else if (draggedElement.id === undefined || draggedElement.id == null) {
-        const folder = { id: Math.random(), items: [this.slides.find((s) => s.id === draggedElement.id)] };
-        this.$emit('create-folder', { folder });
-      } else
+      } else {
         this.$emit('add-to-folder', {
           folderID: targetElement.id.split('-')[0],
-          item: this.slides.find((s) => s.id === draggedElement.id),
+          item: this.slides.find((s) => s.id === draggedElement.id.split('-')[1]),
           append: targetElement.id.split('-')[1],
         });
-      this.$emit('remove-from-folder', {
-        folderID: this.id,
-        item: this.slides.find((s) => s.id === draggedElement.id),
-      });
+        this.$emit('remove-from-folder', {
+          folderID: this.id,
+          item: this.slides.find((s) => s.id === draggedElement.id.split('-')[1]),
+        });
+      }
     },
-    positionSwap() {
-      this.$emit('position-swap', { folderID: this.id });
+    splitImages() {
+      this.$emit('split-images', { folderID: this.id });
     },
     positionLeft() {
       this.$emit('position-left', { folderID: this.id });
@@ -206,7 +203,7 @@ export default {
   }
 
   &.arr-double-icon {
-    left: 44%;
+    left: 43.3%;
     right: 50%;
     bottom: 43%;
   }
