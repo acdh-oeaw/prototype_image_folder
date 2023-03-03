@@ -1,48 +1,54 @@
 <template>
-<div>
-  <draggable class="draggable-list" :list="albums" group="my-group" :animation="300" ...>
-    <div class="list-item" v-for="element in albums" :key="element.id">
-      <base-box-button class="image-wrapper"
-                      :box-size="{ width: 'unset' }"
-                      :text="element.title"
-                      icon="collection"
-                       @clicked="$router.push(`/album/${element.album_id}`)">
-      </base-box-button>
-    </div>
-  <base-box-button
-      icon="add-existing-collection"
-      text="Neuen Ordner erstellen"
-      :show-title="false"
-      :box-size="{ width: 'unset' }"
-      class="box">
-  </base-box-button>
-  <base-box-button
-      icon="add-existing-object"
-      box-style="large"
-      text="Neue Arbeitsmappe erstellen"
-      :show-title="false"
-      :box-size="{ width: 'unset' }"
-      class="box">
-  </base-box-button>
-  </draggable>
-</div>
+  <div>
+    <draggable
+      class="draggable-list"
+      :list="albums"
+      group="my-group"
+      :animation="300"
+      ...>
+      <div
+        v-for="element in albums"
+        :key="element.id"
+        class="list-item">
+        <base-box-button
+          class="image-wrapper"
+          :box-size="{ width: 'unset' }"
+          :text="element.title"
+          icon="collection"
+          @clicked="$router.push(`/album/${element.album_id}`)" />
+      </div>
+      <base-box-button
+        icon="add-existing-collection"
+        text="Neuen Ordner erstellen"
+        :show-title="false"
+        :box-size="{ width: 'unset' }"
+        class="box" />
+      <base-box-button
+        icon="add-existing-object"
+        box-style="large"
+        text="Neue Arbeitsmappe erstellen"
+        :show-title="false"
+        :box-size="{ width: 'unset' }"
+        class="box" />
+    </draggable>
+  </div>
 </template>
 
 <script>
-import {albums} from "@/albums";
-import draggable from "vuedraggable";
+import albums from '@/albums';
+import draggable from 'vuedraggable';
 
 export default {
-  name: "AlbumOverView",
+  name: 'AlbumOverView',
   components: {
     draggable,
   },
   data() {
     return {
       albums,
-    }
-  }
-}
+    };
+  },
+};
 </script>
 
 <style scoped>

@@ -1,37 +1,43 @@
 <template>
   <main>
     <div>
-      <h1>Neueste Beiträge
-        <small> ({{entriesList.length}})</small>
+      <h1>
+        Neueste Beiträge
+        <small> ({{ entriesList.length }})</small>
       </h1>
-
     </div>
     <div class="images-view">
-      <div class="list-item" v-for="element in displayedRecords" :key="element.id">
-        <base-image-box class="image-wrapper"
-                        :box-size="{ width: 'unset' }"
-                        :image-url="element.imageUrl"
-                        :title="element.title"
-                        :subtext="element.subtext"
-                        :description="element.description">
-          <img class="box-image" :src="element.imageUrl" alt="">
+      <div
+        v-for="element in displayedRecords"
+        :key="element.id"
+        class="list-item">
+        <base-image-box
+          class="image-wrapper"
+          :box-size="{ width: 'unset' }"
+          :image-url="element.imageUrl"
+          :title="element.title"
+          :subtext="element.subtext"
+          :description="element.description">
+          <img
+            class="box-image"
+            :src="element.imageUrl"
+            alt="">
         </base-image-box>
       </div>
     </div>
     <div class="pagination">
       <BasePagination
-          :total="totalPages()"
-          v-model="page"
-      ></BasePagination>
+        v-model="page"
+        :total="totalPages()" />
     </div>
   </main>
 </template>
 
 <script>
-import {entriesList} from "@/data";
+import entriesList from '@/data';
 
 export default {
-  name: "ImagesOverview",
+  name: 'ImagesOverview',
   data() {
     const page = 1;
     const perPage = 12;
@@ -39,21 +45,21 @@ export default {
       entriesList,
       perPage,
       page,
-    }
-  },
-  methods: {
-    totalPages() {
-      return Math.ceil(entriesList.length) / 12;
-    },
+    };
   },
   computed: {
     displayedRecords() {
       const startIndex = this.perPage * (this.page - 1);
       const endIndex = startIndex + this.perPage;
       return this.entriesList.slice(startIndex, endIndex);
-    }
+    },
   },
-}
+  methods: {
+    totalPages() {
+      return Math.ceil(entriesList.length) / 12;
+    },
+  },
+};
 </script>
 
 <style scoped>

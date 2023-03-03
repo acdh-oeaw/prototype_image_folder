@@ -2,30 +2,27 @@
   <main>
     <div class="submenu">
       <base-button
-          button-style="row"
-          text="Alle Kunstwerke"
-          @clicked="$router.push('/')"
-          :active="$route.path === '/'"
-      ></base-button>
+        button-style="row"
+        text="Alle Kunstwerke"
+        :active="$route.path === '/'"
+        @clicked="$router.push('/')" />
       <base-button
-          button-style="row"
-          text="Arbeitsmappen"
-          @clicked="$router.push('/albums')"
-          :active="$route.path === '/albums'"
-      ></base-button>
+        button-style="row"
+        text="Arbeitsmappen"
+        :active="$route.path === '/albums'"
+        @clicked="$router.push('/albums')" />
       <base-button
-          class="submenu-item"
-          button-style="row"
-          text="Leitfaden Bildbenutzung"
-      ></base-button>
+        class="submenu-item"
+        button-style="row"
+        text="Leitfaden Bildbenutzung" />
     </div>
   </main>
 </template>
 
 <script>
 export default {
-  name: "SubMenu"
-}
+  name: 'SubMenu',
+};
 </script>
 
 <style scoped>
@@ -38,6 +35,5 @@ export default {
   background: white;
   border-bottom: solid 1px #c8c8c8;
 }
-
 
 </style>

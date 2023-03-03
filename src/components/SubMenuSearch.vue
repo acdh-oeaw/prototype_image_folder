@@ -2,28 +2,24 @@
   <main>
     <div class="submenu">
       <base-button
-          button-style="row"
-          text="Alle Kunstwerke"
-          @clicked="$router.push('/')"
-          :active="$route.path === '/'"
-      ></base-button>
+        button-style="row"
+        text="Alle Kunstwerke"
+        :active="$route.path === '/'"
+        @clicked="$router.push('/')" />
       <base-button
-          button-style="row"
-          text="Arbeitsmappen"
-          @clicked="$router.push('/albums')"
-          :active="$route.path === '/albums'"
-      ></base-button>
+        button-style="row"
+        text="Arbeitsmappen"
+        :active="$route.path === '/albums'"
+        @clicked="$router.push('/albums')" />
       <base-button
-          class="submenu-item"
-          button-style="row"
-          text="Leitfaden Bildbenutzung"
-      ></base-button>
+        class="submenu-item"
+        button-style="row"
+        text="Leitfaden Bildbenutzung" />
       <div class="search">
         <BaseSearch
-            v-model="searchText"
-            label="Search your Entries"
-            placeholder="Durchsuche deine Arbeiten und Ereignisse"
-        />
+          v-model="searchText"
+          label="Search your Entries"
+          placeholder="Durchsuche deine Arbeiten und Ereignisse" />
       </div>
     </div>
   </main>
@@ -31,8 +27,8 @@
 
 <script>
 export default {
-  name: "SubMenuSearch"
-}
+  name: 'SubMenuSearch',
+};
 </script>
 
 <style scoped>
@@ -47,6 +43,5 @@ export default {
   margin-left: auto;
   width: 57%;
 }
-
 
 </style>

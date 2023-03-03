@@ -1,20 +1,18 @@
 <template>
   <div
-    :class="{ 'drop-zone': true, 'drop-zone-color': isVisible }"
     :id="`dropZoneLine-${idx}`"
+    :class="{ 'drop-zone': true, 'drop-zone-color': isVisible }"
     @dragenter="onDragEnter"
     @dragleave="onDragLeave"
     @dragover="allowDrop"
-    @drop="onDrop"
-  ></div>
+    @drop="onDrop" />
 </template>
-
 <script>
 export default {
-  name: "DropZoneLine",
-  props: ["dragStartElement", "idx"],
+  name: 'DropZoneLine',
+  props: ['dragStartElement', 'idx'],
   data() {
-    let isVisible = false;
+    const isVisible = false;
     return {
       isVisible,
     };

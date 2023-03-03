@@ -1,23 +1,36 @@
 <template>
-  <draggable @start="onStart" @end="onEnd">
-    <BaseBox :id="`${this.id}-${this.slides[0].id}`" ref="baseBox" :box-size="{ width: 'unset' }">
+  <draggable
+    @start="onStart"
+    @end="onEnd">
+    <BaseBox
+      :id="`${id}-${slides[0].id}`"
+      ref="baseBox"
+      :box-size="{ width: 'unset' }">
       <div v-if="slides.length === 1">
         <div>
-          <div class="drop-zone">
+          <div
+            v-if="!currentFolderElementIsFull"
+            class="drop-zone">
             <PlaceholderZone
-              :id="this.id + '-0'"
+              :id="id + '-0'"
               :placement="false"
-              :dragStartElement="currentFolderElement"
-            ></PlaceholderZone>
+              :drag-start-element="currentFolderElement" />
             <PlaceholderZone
-              :id="this.id + '-1'"
+              :id="id + '-1'"
               :placement="true"
-              :dragStartElement="currentFolderElement"
-            ></PlaceholderZone>
+              :drag-start-element="currentFolderElement" />
           </div>
         </div>
-        <div id="image-single" :object="slides" group="image1" :animation="300" v-for="image in slides" :key="image.id">
-          <SingleImage :content="image" :folderID="id"></SingleImage>
+        <div
+          v-for="image in slides"
+          id="image-single"
+          :key="image.id"
+          :object="slides"
+          group="image1"
+          :animation="300">
+          <SingleImage
+            :content="image"
+            :folder-i-d="id" />
         </div>
       </div>
       <div v-else-if="slides.length === 2">
@@ -28,22 +41,32 @@
           ghost-class="moving-content"
           :animation="300"
           @start="onStart"
-          @end="onEnd"
-        >
-          <div class="image-double" v-for="content in slides" :key="content.id" :id="content.id">
-            <DoubleImage :content="content"></DoubleImage>
+          @end="onEnd">
+          <div
+            v-for="content in slides"
+            :id="content.id"
+            :key="content.id"
+            class="image-double">
+            <DoubleImage :content="content" />
           </div>
         </div>
       </div>
       <div class="options">
-        <div class="icon-wrapper arr-right-icon" @click="positionRight">
-          <ArrowRight></ArrowRight>
+        <div
+          class="icon-wrapper arr-right-icon"
+          @click="positionRight">
+          <ArrowRight />
         </div>
-        <div class="icon-wrapper arr-left-icon" @click="positionLeft">
-          <ArrowLeft></ArrowLeft>
+        <div
+          class="icon-wrapper arr-left-icon"
+          @click="positionLeft">
+          <ArrowLeft />
         </div>
-        <div v-if="slides.length === 2" class="icon-wrapper arr-double-icon" @click="splitImages">
-          <SeparatorVertical></SeparatorVertical>
+        <div
+          v-if="slides.length === 2"
+          class="icon-wrapper arr-double-icon"
+          @click="splitImages">
+          <SeparatorVertical />
         </div>
       </div>
     </BaseBox>
@@ -51,16 +74,14 @@
 </template>
 
 <script>
-import { ArrowRight } from "lucide-vue";
-import { ArrowLeft } from "lucide-vue";
-import { SeparatorVertical } from "lucide-vue";
-import draggable from "vuedraggable";
-import DoubleImage from "@/components/BaseSlideBox/DoubleImage.vue";
-import SingleImage from "@/components/BaseSlideBox/SingleImage.vue";
-import PlaceholderZone from "@/components/BaseSlideBox/PlaceholderZone.vue";
+import { ArrowRight, ArrowLeft, SeparatorVertical } from 'lucide-vue';
+import draggable from 'vuedraggable';
+import DoubleImage from '@/components/BaseSlideBox/DoubleImage';
+import SingleImage from '@/components/BaseSlideBox/SingleImage';
+import PlaceholderZone from '@/components/BaseSlideBox/PlaceholderZone';
 
 export default {
-  name: "BaseSlideBox",
+  name: 'BaseSlideBox',
   components: {
     PlaceholderZone,
     SingleImage,
@@ -77,6 +98,7 @@ export default {
     slides: [],
     id: Number,
     currentFolderElement: String,
+    currentFolderElementIsFull: Boolean,
   },
   data() {
     const highlight = false;
@@ -93,40 +115,40 @@ export default {
     },
     onEnd(ev) {
       console.log(this.id);
-      console.log("onEnd Event:", ev, this.slides);
-      let draggedElement = ev.item;
+      console.log('onEnd Event:', ev, this.slides);
+      const draggedElement = ev.item;
       let targetElement = ev.explicitOriginalTarget;
       if (!targetElement) {
         targetElement = ev.originalEvent.toElement;
       }
-      console.log("Target ", targetElement);
-      if (targetElement.id === "" || targetElement.id === null) {
-        return;
-      } else if (targetElement.id.startsWith("dropZoneLine")) {
-        this.$emit("reorder-folder", {
+      console.log('Target ', targetElement);
+      if (targetElement.id === '' || targetElement.id === null) {
+        console.log('Nothing');
+      } else if (targetElement.id.startsWith('dropZoneLine')) {
+        this.$emit('reorder-folder', {
           folderID: this.id,
-          newIndex: +targetElement.id.replace("dropZoneLine-", ""),
+          newIndex: +targetElement.id.replace('dropZoneLine-', ''),
         });
       } else {
-        this.$emit("add-to-folder", {
-          folderID: targetElement.id.split("-")[0],
-          item: this.slides.find((s) => s.id === draggedElement.id.split("-")[1]),
-          append: targetElement.id.split("-")[1],
+        this.$emit('add-to-folder', {
+          folderID: targetElement.id.split('-')[0],
+          item: this.slides.find(s => s.id === draggedElement.id.split('-')[1]),
+          append: targetElement.id.split('-')[1],
         });
-        this.$emit("remove-from-folder", {
+        this.$emit('remove-from-folder', {
           folderID: this.id,
-          item: this.slides.find((s) => s.id === draggedElement.id.split("-")[1]),
+          item: this.slides.find(s => s.id === draggedElement.id.split('-')[1]),
         });
       }
     },
     splitImages() {
-      this.$emit("split-images", { folderID: this.id });
+      this.$emit('split-images', { folderID: this.id });
     },
     positionLeft() {
-      this.$emit("position-left", { folderID: this.id });
+      this.$emit('position-left', { folderID: this.id });
     },
     positionRight() {
-      this.$emit("position-right", { folderID: this.id });
+      this.$emit('position-right', { folderID: this.id });
     },
   },
 };

@@ -1,10 +1,9 @@
-import ImagesOverview from "@/components/ImagesOverview.vue";
-import AlbumOverView from "@/components/AlbumOverView.vue";
-import AlbumDetailView from "@/components/AlbumDetailView.vue";
+import ImagesOverview from '@/components/ImagesOverview';
+import AlbumOverView from '@/components/AlbumOverView';
+import AlbumDetailView from '@/components/AlbumDetailView';
 
-export const routes = [
-    { path: '/', component: ImagesOverview },
-    { path: '/albums', component: AlbumOverView },
-    { path: '/album/:id', component: AlbumDetailView },
-]
-
+export default [
+  { path: '/', component: ImagesOverview },
+  { path: '/albums', component: AlbumOverView },
+  { path: '/album/:id', component: AlbumDetailView },
+];
