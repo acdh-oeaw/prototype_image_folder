@@ -1,24 +1,23 @@
 <template>
   <div class="image-wrapper">
-    <Info class="info-icon"></Info>
-    <Trash2 class="trash-icon"></Trash2>
+    <Info class="info-icon" />
+    <Trash2 class="trash-icon" />
     <BaseImage
-        ref="image"
-        :src="content.imageUrl"
-        :alt="content.title">
-    </BaseImage>
+      ref="image"
+      :src="content.imageUrl"
+      :alt="content.title" />
     <div class="text-wrapper">
       <div
-          ref="headerBox"
-          :class="['base-image-box-header']">
+        ref="headerBox"
+        :class="['base-image-box-header']">
         <div
-            :title="content.title"
-            :class="['base-image-box-title']">
+          :title="content.title"
+          :class="['base-image-box-title']">
           {{ content.title }}
         </div>
         <div
-            :title="content.subtext"
-            class="base-image-box-subtext">
+          :title="content.subtext"
+          class="base-image-box-subtext">
           {{ content.subtext }}
         </div>
       </div>
@@ -27,17 +26,16 @@
 </template>
 
 <script>
-import {Trash2} from "lucide-vue";
-import {Info} from "lucide-vue";
+import { Trash2, Info } from 'lucide-vue';
 
 export default {
-  name: "DoubleImage",
+  name: 'DoubleImage',
   components: {
     Trash2,
     Info,
   },
   props: ['content'],
-}
+};
 </script>
 
 <style lang="scss" scoped>

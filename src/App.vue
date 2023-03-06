@@ -1,10 +1,9 @@
 <script>
-import {defineComponent} from 'vue';
-import {entriesList} from './data'
-import AppHeader from "@/components/AppHeader.vue";
-import SubMenu from "@/components/SubMenu.vue";
-import SubMenuSearch from "@/components/SubMenuSearch.vue";
-
+import { defineComponent } from 'vue';
+import AppHeader from '@/components/AppHeader';
+import SubMenu from '@/components/SubMenu';
+import SubMenuSearch from '@/components/SubMenuSearch';
+import entriesList from './data';
 
 export default defineComponent({
   components: {
@@ -36,7 +35,7 @@ export default defineComponent({
       numberOfBoxes: 12,
       entriesList,
       selectedBoxes: [],
-    }
+    };
   },
   computed: {
     visibleBoxes: {
@@ -44,13 +43,15 @@ export default defineComponent({
         return this.entriesList.slice(0, this.numberOfBoxes);
       },
       set(val) {
-        const nonVisibleBoxes = this.entriesList.slice(this.numberOfBoxes - 1, this.entriesList.length - 1);
+        const nonVisibleBoxes = this.entriesList.slice(
+          this.numberOfBoxes - 1, this.entriesList.length - 1,
+        );
         this.entriesList = [...val, ...nonVisibleBoxes];
       },
     },
   },
   methods: {
-    entrySelected({entryId, selected}) {
+    entrySelected({ entryId, selected }) {
       if (selected && !this.selectedBoxes.includes(entryId)) {
         this.selectedBoxes.push(entryId);
       } else if (!selected) {
@@ -65,22 +66,22 @@ export default defineComponent({
       }
     },
   },
-})
+});
 </script>
 
 <template>
   <main>
     <div class="wrapper">
       <div>
-        <AppHeader></AppHeader>
+        <AppHeader />
       </div>
       <div v-if="$route.path !== '/'">
-        <SubMenu></SubMenu>
+        <SubMenu />
       </div>
       <div v-else>
-        <SubMenuSearch></SubMenuSearch>
+        <SubMenuSearch />
       </div>
-      <RouterView></RouterView>
+      <RouterView />
     </div>
   </main>
 </template>
@@ -123,4 +124,3 @@ export default defineComponent({
   margin: 8px;
 }
 </style>
-

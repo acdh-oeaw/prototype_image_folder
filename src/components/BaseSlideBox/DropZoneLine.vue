@@ -1,28 +1,37 @@
 <template>
-<div :class="{'drop-zone': true, 'drop-zone-color': isVisible}" @dragenter="onDragEnter" @dragleave="onDragLeave">
-
-</div>
+  <div
+    :id="`dropZoneLine-${idx}`"
+    :class="{ 'drop-zone': true, 'drop-zone-color': isVisible }"
+    @dragenter="onDragEnter"
+    @dragleave="onDragLeave"
+    @dragover="allowDrop"
+    @drop="onDrop" />
 </template>
-
 <script>
 export default {
-  name: "DropZoneLine",
-  props: ['dragStartElement'],
+  name: 'DropZoneLine',
+  props: ['dragStartElement', 'idx'],
   data() {
-    let isVisible = false;
+    const isVisible = false;
     return {
-      isVisible
-    }
+      isVisible,
+    };
   },
   methods: {
+    onDrop() {
+      this.isVisible = false;
+    },
+    allowDrop(ev) {
+      ev.preventDefault();
+    },
     onDragEnter() {
       this.isVisible = true;
     },
     onDragLeave() {
       this.isVisible = false;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -35,8 +44,6 @@ export default {
 }
 
 .drop-zone.drop-zone-color {
-  background: #9C27B0;
+  background: #9c27b0;
 }
-
-
 </style>

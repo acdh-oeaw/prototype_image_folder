@@ -1,30 +1,30 @@
 <template>
   <main>
     <div class="header">
-      <h1 class="title"
-          style="font-size: 25px; padding-top: 7px; padding-left: 20px; font-family: 'Source Sans Pro, Helvetica Neue, Helvetica,Arial' ,sans-serif;">
-        base</h1>
+      <h1
+        class="title"
+        style="font-size: 25px; padding-top: 7px; padding-left: 20px;
+        font-family: 'Source Sans Pro, Helvetica Neue, Helvetica,Arial' ,sans-serif;">
+        base
+      </h1>
       <div class="display-items">
-        <base-drop-down class="drop-down"
-            placeholder="Olivia Reichl"
-        ></base-drop-down>
+        <base-drop-down
+          class="drop-down"
+          placeholder="Olivia Reichl" />
         <BaseButton
-            text="Image+"
-            button-style="row"
-            :active="true"
-            icon="subscribe"
-            iconColored="true">
-        </BaseButton>
+          text="Image+"
+          button-style="row"
+          :active="true"
+          icon="subscribe"
+          icon-colored="true" />
         <BaseButton
-            text="Recherche"
-            button-style="row"
-            icon="subscribe">
-        </BaseButton>
+          text="Recherche"
+          button-style="row"
+          icon="subscribe" />
         <BaseButton
-            text="Hilfe"
-            button-style="row"
-            icon="subscribe">
-        </BaseButton>
+          text="Hilfe"
+          button-style="row"
+          icon="subscribe" />
       </div>
     </div>
   </main>
@@ -32,8 +32,8 @@
 
 <script>
 export default {
-  name: "AppHeader"
-}
+  name: 'AppHeader',
+};
 </script>
 
 <style scoped>
