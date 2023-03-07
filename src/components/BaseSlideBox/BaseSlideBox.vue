@@ -1,6 +1,5 @@
 <template>
   <draggable
-    @start="onStart"
     @end="onEnd">
     <BaseBox
       :id="`${id}-${slides[0].id}`"
@@ -34,20 +33,38 @@
         </div>
       </div>
       <div v-else-if="slides.length === 2">
+        <div>
+          <div
+            v-if="imageSwitch"
+            class="drop-zone">
+            <PlaceholderZone
+              v-if="!switchLeftImage"
+              :id="id + '-0-doubleImg'"
+              :placement="false"
+              :drag-start-element="currentFolderElement" />
+            <PlaceholderZone
+              v-if="switchLeftImage"
+              :id="id + '-1-doubleImg'"
+              :placement="true"
+              :drag-start-element="currentFolderElement" />
+          </div>
+        </div>
         <div
           class="content-wrapper"
           :object="slides"
           :group="{ name: 'image-double', put: false }"
           ghost-class="moving-content"
           :animation="300"
-          @start="onStart"
           @end="onEnd">
           <div
-            v-for="content in slides"
+            v-for="(content, idx) in slides"
             :id="content.id"
             :key="content.id"
             class="image-double">
-            <DoubleImage :content="content" />
+            <DoubleImage
+              :folder-id="id"
+              :idx="idx"
+              :content="content" />
           </div>
         </div>
       </div>
@@ -108,14 +125,20 @@ export default {
       drag,
     };
   },
-  methods: {
-    onStart(ev) {
-      console.log(this.id);
-      console.log(ev);
+  computed: {
+    imageSwitch() {
+      const imgSwitch = this.currentFolderElement && +this.currentFolderElement.split('-')[0] === this.id;
+      console.log('Image switch:', this.currentFolderElement, this.id, imgSwitch);
+      return imgSwitch;
     },
+    switchLeftImage() {
+      return this.currentFolderElement && +this.currentFolderElement.split('-')[1] === 0;
+    },
+  },
+  methods: {
     onEnd(ev) {
-      console.log(this.id);
-      console.log('onEnd Event:', ev, this.slides);
+      // console.log(this.id);
+      // console.log('onEnd Event:', ev, this.slides);
       const draggedElement = ev.item;
       let targetElement = ev.explicitOriginalTarget;
       if (!targetElement) {
@@ -124,6 +147,10 @@ export default {
       console.log('Target ', targetElement);
       if (targetElement.id === '' || targetElement.id === null) {
         console.log('Nothing');
+      } else if (targetElement.id.endsWith('doubleImg')) {
+        if (+targetElement.id.split('-')[0] === this.id && +targetElement.id.split('-')[1] !== +draggedElement.id.split('-')[1]) {
+          this.$emit('switch-images', { folderID: this.id });
+        }
       } else if (targetElement.id.startsWith('dropZoneLine')) {
         this.$emit('reorder-folder', {
           folderID: this.id,

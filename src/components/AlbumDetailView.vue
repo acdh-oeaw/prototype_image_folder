@@ -10,16 +10,21 @@
       <div>
         <ButtonMenu />
       </div>
-      <div @dragstart="onDragStart">
+      <div
+        @dragstart="onDragStart"
+        @dragend="onDragEnd">
         <div class="draggable-list">
           <div
             v-for="(element, idx) in album.folders"
             :id="element.id"
             :key="element.id"
             class="drop-zone-wrapper">
-            <DropZoneLine
-              :drag-start-element="currentFolderElement"
-              :idx="idx" />
+            <div>
+              <DropZoneLine
+                v-if="!currentFolderElement || !currentFolderElement.endsWith('doubleImg')"
+                :drag-start-element="currentFolderElement"
+                :idx="idx" />
+            </div>
             <BaseSlideBox
               :id="element.id"
               :slides="element.items"
@@ -31,10 +36,14 @@
               @split-images="splitImages"
               @position-left="positionLeft"
               @position-right="positionRight"
-              @reorder-folder="reorderFolder" />
-            <DropZoneLine
-              :drag-start-element="currentFolderElement"
-              :idx="idx + 1" />
+              @reorder-folder="reorderFolder"
+              @switch-images="switchImages" />
+            <div>
+              <DropZoneLine
+                v-if="!currentFolderElement || !currentFolderElement.endsWith('doubleImg')"
+                :drag-start-element="currentFolderElement"
+                :idx="idx + 1" />
+            </div>
           </div>
           <base-box-button
             icon="plus"
@@ -82,6 +91,7 @@ export default {
     'position-left',
     'position-right',
     'reorder-folder',
+    'switch-images',
   ],
   data() {
     let currentFolderElement;
@@ -105,9 +115,13 @@ export default {
   },
   methods: {
     onDragStart(event) {
-      console.log('DragStart: ', event);
       this.currentFolderElement = event.srcElement.id;
       this.currentFolderElementIsFull = this.album.folders.find(f => f.id === +event.srcElement.id.split('-')[0])?.items?.length === 2;
+      console.log('DragStart: ', this.currentFolderElement);
+    },
+    onDragEnd() {
+      this.currentFolderElement = null;
+      this.currentFolderElementIsFull = null;
     },
 
     onCreateFolder(ev) {
@@ -132,6 +146,12 @@ export default {
       if (targetFolder.items.length === 0) {
         this.album.folders.splice(folderIndex, 1);
       }
+    },
+
+    switchImages(ev) {
+      console.log('SWITCH', ev);
+      const targetFolder = this.album.folders.find(f => f.id === +ev.folderID);
+      targetFolder.items.reverse();
     },
 
     splitImages(ev) {

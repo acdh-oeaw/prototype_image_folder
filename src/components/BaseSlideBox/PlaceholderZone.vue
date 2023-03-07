@@ -16,10 +16,13 @@ export default {
       isVisible,
     };
   },
+  created() {
+    console.log('New placeholder zone created');
+  },
   methods: {
     onDragEnter() {
       console.log('placeholderzone entered');
-      if (this.dragStartElement === '' || this.dragStartElement.split('-')[0] === this.id.split('-')[0]) {
+      if (this.dragStartElement === '' || (this.dragStartElement.split('-')[0] === this.id.split('-')[0] && !this.dragStartElement.endsWith('doubleImg'))) {
         return;
       }
       this.isVisible = true;
@@ -41,6 +44,7 @@ export default {
   width: 50%;
   position: absolute;
   background: rgba(0, 0, 0, 0);
+  z-index: 2;
 }
 
 .image-wrapper.drag-drop-overlay {
