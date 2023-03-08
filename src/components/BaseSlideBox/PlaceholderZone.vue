@@ -3,7 +3,16 @@
     :id="id"
     :class="{ 'image-wrapper': true, right: placement, 'drag-drop-overlay': isVisible }"
     @dragenter="onDragEnter"
-    @dragleave="onDragLeave" />
+    @dragleave="onDragLeave"
+    @drop="onDrop">
+    <div style="pointer-events: none">
+      <BaseIcon
+        name="plus"
+        title="plus"
+        class="icon" />
+    </div>
+    Bild {{ placement ? 'RECHTS' : 'LINKS' }} hinzufügen
+  </div>
 </template>
 
 <script>
@@ -13,22 +22,34 @@ export default {
   data() {
     const isVisible = false;
     return {
+      icons: ['plus'],
       isVisible,
+      dragCounter: 0,
     };
   },
   created() {
     console.log('New placeholder zone created');
   },
   methods: {
-    onDragEnter() {
+    onDragEnter(ev) {
       console.log('placeholderzone entered');
       if (this.dragStartElement === '' || (this.dragStartElement.split('-')[0] === this.id.split('-')[0] && !this.dragStartElement.endsWith('doubleImg'))) {
         return;
       }
+      this.dragCounter += 1;
       this.isVisible = true;
+      ev.stopPropagation();
     },
-    onDragLeave() {
-      console.log('placeholderzone left');
+    onDragLeave(ev) {
+      this.dragCounter -= 1;
+      if (this.dragCounter === 0) {
+        console.log('placeholderzone left');
+        this.isVisible = false;
+      }
+      ev.stopPropagation();
+    },
+    onDrop() {
+      this.dragCounter = 0;
       this.isVisible = false;
     },
   },
@@ -45,6 +66,9 @@ export default {
   position: absolute;
   background: rgba(0, 0, 0, 0);
   z-index: 2;
+  text-align: center;
+    align-content: center;
+    color: transparent;
 }
 
 .image-wrapper.drag-drop-overlay {
@@ -72,4 +96,10 @@ export default {
 .fade-leave-active {
   transition: opacity 0.5s;
 }
+
+.icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 8px;
+  }
 </style>
