@@ -67,8 +67,8 @@ export default {
   background: rgba(0, 0, 0, 0);
   z-index: 2;
   text-align: center;
-    align-content: center;
-    color: transparent;
+  align-content: center;
+  color: transparent;
 }
 
 .image-wrapper.drag-drop-overlay {
