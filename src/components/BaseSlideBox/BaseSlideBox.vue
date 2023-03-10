@@ -4,8 +4,7 @@
     <BaseBox
       :id="`${id}-${slides[0].id}`"
       ref="baseBox"
-      :box-size="{ width: 'unset' }"
-      @dragleave.native="onDragLeave($event)">
+      :box-size="{ width: 'unset' }">
       <div v-if="slides.length === 1">
         <div>
           <div
@@ -137,11 +136,6 @@ export default {
     },
   },
   methods: {
-    onDragLeave(ev) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      console.log('Drag leave', ev);
-    },
     onEnd(ev) {
       // console.log(this.id);
       // console.log('onEnd Event:', ev, this.slides);
