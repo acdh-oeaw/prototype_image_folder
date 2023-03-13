@@ -21,7 +21,6 @@
             class="drop-zone-wrapper">
             <div>
               <DropZoneLine
-                v-if="!currentFolderElement || !currentFolderElement.endsWith('doubleImg')"
                 :drag-start-element="currentFolderElement"
                 :idx="idx" />
             </div>
@@ -40,7 +39,6 @@
               @switch-images="switchImages" />
             <div>
               <DropZoneLine
-                v-if="!currentFolderElement || !currentFolderElement.endsWith('doubleImg')"
                 :drag-start-element="currentFolderElement"
                 :idx="idx + 1" />
             </div>
