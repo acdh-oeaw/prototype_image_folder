@@ -2,7 +2,7 @@
   "name": "base-ui-test",
   "private": true,
   "scripts": {
-    "build": "vue-cli-service serve",
+    "build": "echo 'no build atm'",
     "lint": "vue-cli-service lint",
     "serve": "vue-cli-service serve",
     "start": "vue-cli-service serve",
