@@ -1,57 +1,105 @@
 <template>
-<div :class="{'image-wrapper': true, 'right': placement, 'drag-drop-overlay': isVisible}" :id="id" @dragenter="onDragEnter" @dragleave="onDragLeave">
-</div>
+  <div
+    :id="id"
+    :class="{ 'image-wrapper': true, right: placement, 'drag-drop-overlay': isVisible }"
+    @dragenter="onDragEnter"
+    @dragleave="onDragLeave"
+    @drop="onDrop">
+    <div style="pointer-events: none">
+      <BaseIcon
+        name="plus"
+        title="plus"
+        class="icon" />
+    </div>
+    Bild {{ placement ? 'RECHTS' : 'LINKS' }} hinzufügen
+  </div>
 </template>
 
 <script>
 export default {
-  name: "PlaceholderZone",
+  name: 'PlaceholderZone',
   props: ['id', 'placement', 'dragStartElement'],
   data() {
-    let isVisible = false;
+    const isVisible = false;
     return {
+      icons: ['plus'],
       isVisible,
-    }
+      dragCounter: 0,
+    };
+  },
+  created() {
+    console.log('New placeholder zone created');
   },
   methods: {
-    onDragEnter() {
-      if(this.dragStartElement === "")  {
-        this.isVisible = false
-      } else this.isVisible = true;
+    onDragEnter(ev) {
+      console.log('placeholderzone entered');
+      if (this.dragStartElement === '' || (this.dragStartElement.split('-')[0] === this.id.split('-')[0] && !this.dragStartElement.endsWith('doubleImg'))) {
+        return;
+      }
+      this.dragCounter += 1;
+      this.isVisible = true;
+      ev.stopPropagation();
     },
-    onDragLeave() {
+    onDragLeave(ev) {
+      this.dragCounter -= 1;
+      if (this.dragCounter === 0) {
+        console.log('placeholderzone left');
+        this.isVisible = false;
+      }
+      ev.stopPropagation();
+    },
+    onDrop() {
+      this.dragCounter = 0;
       this.isVisible = false;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
+@import "@/styles/variables.scss";
 
 .image-wrapper {
   display: grid;
   height: 100%;
   width: 50%;
   position: absolute;
-  background: rgba(0,0,0, 0.0);
+  background: rgba(0, 0, 0, 0);
+  z-index: 2;
+  text-align: center;
+  align-content: center;
+  color: transparent;
 }
 
-.image-wrapper.drag-drop-overlay{
-  border-color: grey;
-  border-style: dashed;
-  background: rgba(255,255,255, 0.7);
+.image-wrapper.drag-drop-overlay {
+  border: 3px solid;
+  color: #9c27b0;
+  background: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s ease-in-out;
 }
 
-.image-wrapper.right{
+.image-wrapper.drag-drop-overlay:hover {
+  animation: linearGradientMove 0.3s infinite linear;
+}
+
+@keyframes linearGradientMove {
+  100% {
+    background-position: 4px 0, -4px 100%, 0 -4px, 100% 4px;
+  }
+}
+
+.image-wrapper.right {
   left: 50%;
 }
 
-div#text-node {
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
-  transition: font-size 175ms;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 
+.icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 8px;
+  }
 </style>

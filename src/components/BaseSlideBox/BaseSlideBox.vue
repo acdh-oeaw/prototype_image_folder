@@ -1,52 +1,104 @@
 <template>
-  <BaseBox
+  <draggable
+    @end="onEnd">
+    <BaseBox
+      :id="`${id}-${slides[0].id}`"
       ref="baseBox"
       :box-size="{ width: 'unset' }">
-    <div v-if="slides.length === 1">
-      <div>
-        <div class="drop-zone">
-          <PlaceholderZone :id="this.id + '-0'" :placement="false" :dragStartElement="currentFolderElement"></PlaceholderZone>
-          <PlaceholderZone :id="this.id + '-1'" :placement="true" :dragStartElement="currentFolderElement"></PlaceholderZone>
+      <div v-if="slides.length === 1">
+        <div>
+          <div
+            v-if="!currentFolderElementIsFull"
+            class="drop-zone">
+            <PlaceholderZone
+              :id="id + '-0'"
+              :placement="false"
+              :drag-start-element="currentFolderElement" />
+            <PlaceholderZone
+              :id="id + '-1'"
+              :placement="true"
+              :drag-start-element="currentFolderElement" />
+          </div>
+        </div>
+        <div
+          v-for="image in slides"
+          id="image-single"
+          :key="image.id"
+          :object="slides"
+          group="image1"
+          :animation="300">
+          <SingleImage
+            :content="image"
+            :folder-i-d="id" />
         </div>
       </div>
-      <draggable id="image-single" :object="slides" group="image1"
-                 :animation="300"
-                 v-for="image in slides" :key="image.id">
-        <SingleImage :content="image" :folderID="id"></SingleImage>
-      </draggable>
-    </div>
-    <div v-else-if="slides.length === 2">
-      <draggable class="content-wrapper" :object="slides" :group="{ name: 'image-double', put: false}" ghost-class="moving-content" :animation="300" @start="onStart" @end="onEnd">
-        <div class="image-double" v-for="content in slides" :key="content.id" :id="content.id">
-          <DoubleImage :content="content"></DoubleImage>
+      <div v-else-if="slides.length === 2">
+        <div>
+          <div
+            v-if="imageSwitch"
+            class="drop-zone">
+            <PlaceholderZone
+              v-if="!switchLeftImage"
+              :id="id + '-0-doubleImg'"
+              :placement="false"
+              :drag-start-element="currentFolderElement" />
+            <PlaceholderZone
+              v-if="switchLeftImage"
+              :id="id + '-1-doubleImg'"
+              :placement="true"
+              :drag-start-element="currentFolderElement" />
+          </div>
         </div>
-      </draggable>
-    </div>
-    <div class="options">
-      <div class="icon-wrapper arr-right-icon" @click="positionRight">
-        <ArrowRight></ArrowRight>
+        <div
+          class="content-wrapper"
+          :object="slides"
+          :group="{ name: 'image-double', put: false }"
+          ghost-class="moving-content"
+          :animation="300"
+          @end="onEnd">
+          <div
+            v-for="(content, idx) in slides"
+            :id="content.id"
+            :key="content.id"
+            class="image-double">
+            <DoubleImage
+              :folder-id="id"
+              :idx="idx"
+              :content="content" />
+          </div>
+        </div>
       </div>
-      <div class="icon-wrapper arr-left-icon" @click="positionLeft">
-        <ArrowLeft></ArrowLeft>
+      <div class="options">
+        <div
+          class="icon-wrapper arr-right-icon"
+          @click="positionRight">
+          <ArrowRight />
+        </div>
+        <div
+          class="icon-wrapper arr-left-icon"
+          @click="positionLeft">
+          <ArrowLeft />
+        </div>
+        <div
+          v-if="slides.length === 2"
+          class="icon-wrapper arr-double-icon"
+          @click="splitImages">
+          <SeparatorVertical />
+        </div>
       </div>
-      <div v-if="slides.length === 2" class="icon-wrapper arr-double-icon" @click="positionSwap">
-        <ArrowLeftRight></ArrowLeftRight>
-      </div>
-    </div>
-  </BaseBox>
+    </BaseBox>
+  </draggable>
 </template>
 
 <script>
-import {ArrowRight} from "lucide-vue";
-import {ArrowLeft} from "lucide-vue";
-import {ArrowLeftRight} from "lucide-vue";
-import draggable from "vuedraggable";
-import DoubleImage from "@/components/BaseSlideBox/DoubleImage.vue";
-import SingleImage from "@/components/BaseSlideBox/SingleImage.vue";
-import PlaceholderZone from "@/components/BaseSlideBox/PlaceholderZone.vue";
+import { ArrowRight, ArrowLeft, SeparatorVertical } from 'lucide-vue';
+import draggable from 'vuedraggable';
+import DoubleImage from '@/components/BaseSlideBox/DoubleImage';
+import SingleImage from '@/components/BaseSlideBox/SingleImage';
+import PlaceholderZone from '@/components/BaseSlideBox/PlaceholderZone';
 
 export default {
-  name: "BaseSlideBox",
+  name: 'BaseSlideBox',
   components: {
     PlaceholderZone,
     SingleImage,
@@ -54,7 +106,7 @@ export default {
     draggable,
     ArrowRight,
     ArrowLeft,
-    ArrowLeftRight,
+    SeparatorVertical,
   },
   props: {
     /**
@@ -63,6 +115,7 @@ export default {
     slides: [],
     id: Number,
     currentFolderElement: String,
+    currentFolderElementIsFull: Boolean,
   },
   data() {
     const highlight = false;
@@ -70,48 +123,71 @@ export default {
     return {
       highlight,
       drag,
-    }
+    };
+  },
+  computed: {
+    imageSwitch() {
+      const imgSwitch = this.currentFolderElement && +this.currentFolderElement.split('-')[0] === this.id;
+      console.log('Image switch:', this.currentFolderElement, this.id, imgSwitch);
+      return imgSwitch;
+    },
+    switchLeftImage() {
+      return this.currentFolderElement && +this.currentFolderElement.split('-')[1] === 0;
+    },
   },
   methods: {
-    onStart(ev) {
-      console.log(this.id)
-      console.log(ev)
-    },
     onEnd(ev) {
-      console.log(this.id);
-      console.log(ev.explicitOriginalTarget.id)
-      if (ev.explicitOriginalTarget.id === "") {
-        console.log("RETURN, switch double image")
-        return;
-      } else if (ev.explicitOriginalTarget.id === undefined || ev.explicitOriginalTarget.id == null) {
-        const folder = {id: Math.random(), items: [this.slides.find(s => s.id === ev.item.id)]};
-        this.$emit('create-folder', { folder })
-      } else
-      this.$emit('add-to-folder', { folderID: ev.explicitOriginalTarget.id.split("-")[0], item: this.slides.find(s => s.id === ev.item.id), append:  ev.explicitOriginalTarget.id.split("-")[1]})
-      this.$emit('remove-from-folder', { folderID: this.id, item: this.slides.find(s => s.id === ev.item.id) })
+      // console.log(this.id);
+      // console.log('onEnd Event:', ev, this.slides);
+      const draggedElement = ev.item;
+      let targetElement = ev.explicitOriginalTarget;
+      if (!targetElement) {
+        targetElement = ev.originalEvent.toElement;
+      }
+      console.log('Target ', targetElement);
+      if (targetElement.id === '' || targetElement.id === null) {
+        console.log('Nothing');
+      } else if (targetElement.id.endsWith('doubleImg')) {
+        if (+targetElement.id.split('-')[0] === this.id && +targetElement.id.split('-')[1] !== +draggedElement.id.split('-')[1]) {
+          this.$emit('switch-images', { folderID: this.id });
+        }
+      } else if (targetElement.id.startsWith('dropZoneLine')) {
+        this.$emit('reorder-folder', {
+          folderID: this.id,
+          newIndex: +targetElement.id.replace('dropZoneLine-', ''),
+        });
+      } else {
+        this.$emit('add-to-folder', {
+          folderID: targetElement.id.split('-')[0],
+          item: this.slides.find(s => s.id === draggedElement.id.split('-')[1]),
+          append: targetElement.id.split('-')[1],
+        });
+        this.$emit('remove-from-folder', {
+          folderID: this.id,
+          item: this.slides.find(s => s.id === draggedElement.id.split('-')[1]),
+        });
+      }
     },
-    positionSwap() {
-      this.$emit('position-swap', { folderID: this.id })
+    splitImages() {
+      this.$emit('split-images', { folderID: this.id });
     },
     positionLeft() {
-      this.$emit('position-left', { folderID: this.id })
+      this.$emit('position-left', { folderID: this.id });
     },
     positionRight() {
-      this.$emit('position-right', { folderID: this.id })
-
+      this.$emit('position-right', { folderID: this.id });
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
+@import "@/styles/variables.scss";
 
 .content-wrapper {
   display: grid;
   height: 100%;
   grid-template-columns: 1fr 1fr;
-
 }
 
 .image-double {
@@ -134,7 +210,6 @@ export default {
   width: 100%;
 }
 
-
 .options {
   display: flex;
   width: 100%;
@@ -142,7 +217,6 @@ export default {
   position: absolute;
   pointer-events: none;
 }
-
 
 .icon-wrapper {
   pointer-events: auto;
@@ -160,7 +234,7 @@ export default {
   cursor: pointer;
 
   &:hover {
-    color: #9C27B0;
+    color: #9c27b0;
   }
 
   &.trash-icon {
@@ -184,13 +258,11 @@ export default {
   }
 
   &.arr-double-icon {
-    left: 44%;
+    left: 43.3%;
     right: 50%;
     bottom: 43%;
   }
-
 }
-
 
 .image-single {
   object-fit: cover;
@@ -203,9 +275,7 @@ export default {
     width: 100%;
     object-fit: cover;
   }
-
 }
-
 
 .text-wrapper {
   overflow: hidden;
@@ -264,7 +334,5 @@ export default {
   &-shadow-large {
     box-shadow: $box-shadow-edit;
   }
-
 }
-
 </style>

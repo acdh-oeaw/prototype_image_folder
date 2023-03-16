@@ -1,24 +1,27 @@
 <template>
   <div class="image-wrapper">
-    <Info class="info-icon"></Info>
-    <Trash2 class="trash-icon"></Trash2>
-    <BaseImage
+    <Info class="info-icon" />
+    <Trash2 class="trash-icon" />
+    <draggable
+      @end="onEnd">
+      <BaseImage
+        :id="`${folderId}-${idx}-doubleImg`"
         ref="image"
         :src="content.imageUrl"
-        :alt="content.title">
-    </BaseImage>
+        :alt="content.title" />
+    </draggable>
     <div class="text-wrapper">
       <div
-          ref="headerBox"
-          :class="['base-image-box-header']">
+        ref="headerBox"
+        :class="['base-image-box-header']">
         <div
-            :title="content.title"
-            :class="['base-image-box-title']">
+          :title="content.title"
+          :class="['base-image-box-title']">
           {{ content.title }}
         </div>
         <div
-            :title="content.subtext"
-            class="base-image-box-subtext">
+          :title="content.subtext"
+          class="base-image-box-subtext">
           {{ content.subtext }}
         </div>
       </div>
@@ -27,17 +30,47 @@
 </template>
 
 <script>
-import {Trash2} from "lucide-vue";
-import {Info} from "lucide-vue";
+import { Trash2, Info } from 'lucide-vue';
+import draggable from 'vuedraggable';
 
 export default {
-  name: "DoubleImage",
+  name: 'DoubleImage',
   components: {
     Trash2,
     Info,
+    draggable,
   },
-  props: ['content'],
-}
+  props: ['content', 'idx', 'folderId'],
+  methods: {
+    onEnd(ev) {
+      console.log('DoubleImage', ev);
+      /* const draggedElement = ev.item;
+      let targetElement = ev.explicitOriginalTarget;
+      if (!targetElement) {
+        targetElement = ev.originalEvent.toElement;
+      }
+      console.log('Target ', targetElement);
+      if (targetElement.id === '' || targetElement.id === null) {
+        console.log('Nothing');
+      } else if (targetElement.id.startsWith('dropZoneLine')) {
+        this.$emit('reorder-folder', {
+          folderID: this.id,
+          newIndex: +targetElement.id.replace('dropZoneLine-', ''),
+        });
+      } else {
+        this.$emit('add-to-folder', {
+          folderID: targetElement.id.split('-')[0],
+          item: this.slides.find(s => s.id === draggedElement.id.split('-')[1]),
+          append: targetElement.id.split('-')[1],
+        });
+        this.$emit('remove-from-folder', {
+          folderID: this.id,
+          item: this.slides.find(s => s.id === draggedElement.id.split('-')[1]),
+        });
+      } */
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

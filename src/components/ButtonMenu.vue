@@ -1,33 +1,29 @@
 <template>
-<div class="button-menu">
-  <ul class="menu-list">
-    <li>
-      <BaseDropButton
-          :buttons="button1">
-      </BaseDropButton>
-    </li>
-    <li>
-      <BaseDropButton
-          :buttons="button2">
-      </BaseDropButton>
-    </li>
-    <li>
-      <BaseDropButton
-          :buttons="button3">
-      </BaseDropButton>
-    </li>
-    <li>
-      <BaseDropButton
-          :buttons="button4">
-      </BaseDropButton>
-    </li>
-  </ul>
-</div>
+  <div class="button-menu">
+    <ul class="menu-list">
+      <li>
+        <BaseDropButton
+          :buttons="button1" />
+      </li>
+      <li>
+        <BaseDropButton
+          :buttons="button2" />
+      </li>
+      <li>
+        <BaseDropButton
+          :buttons="button3" />
+      </li>
+      <li>
+        <BaseDropButton
+          :buttons="button4" />
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "ButtonMenu",
+  name: 'ButtonMenu',
   data() {
     return {
       button1: [{
@@ -50,9 +46,9 @@ export default {
         action: 'delete',
         icon: 'waste-bin',
       }],
-    }
+    };
   },
-}
+};
 </script>
 
 <style scoped>
