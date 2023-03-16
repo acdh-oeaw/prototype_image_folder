@@ -5,7 +5,8 @@
     "build": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
     "serve": "vue-cli-service serve",
-    "start": "vue-cli-service serve"
+    "start": "vue-cli-service serve",
+    "test": "echo 'no tests'"
   },
   "dependencies": {
     "@fontsource/source-sans-pro": "^4.5.11",
