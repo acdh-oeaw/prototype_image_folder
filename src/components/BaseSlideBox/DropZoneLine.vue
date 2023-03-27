@@ -15,6 +15,7 @@ export default {
     const isVisible = false;
     return {
       isVisible,
+      placeholderTimeout: null,
     };
   },
   methods: {
@@ -26,9 +27,16 @@ export default {
     },
     onDragEnter() {
       this.isVisible = true;
+      const currentVueComponent = this;
+      this.placeholderTimeout = window.setTimeout(() => {
+        console.log('Started timeout');
+        currentVueComponent.$emit('add-placeholder-folder', { idx: currentVueComponent.idx });
+      }, 500);
     },
     onDragLeave() {
       this.isVisible = false;
+      if (this.placeholderTimeout) { window.clearTimeout(this.placeholderTimeout); }
+      // this.$emit('remove-folder', { folderID: 'placeholderFolder' });
     },
   },
 };
