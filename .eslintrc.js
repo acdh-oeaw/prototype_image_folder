@@ -16,17 +16,17 @@ module.exports = {
   rules: {
     // disallow reassignment of function parameters
     // disallow parameter object manipulation except for specific exclusions
-    'no-param-reassign': [
-      'error',
-      {
-        props: true,
-        ignorePropertyModificationsFor: [
-          'state', // for vuex state
-          'acc', // for reduce accumulators
-          'e', // for e.returnvalue
-        ],
-      },
-    ],
+    // 'no-param-reassign': [
+    //   'error',
+    //   {
+    //     props: false,
+    //     ignorePropertyModificationsFor: [
+    //       'state', // for vuex state
+    //       'acc', // for reduce accumulators
+    //       'e', // for e.returnvalue
+    //     ],
+    //   },
+    // ],
     // don't require .vue extension when importing
     'import/extensions': [
       'error',

@@ -18,13 +18,17 @@
             v-for="(element, idx) in album.folders"
             :id="element.id"
             :key="element.id"
-            class="drop-zone-wrapper">
+            :class="{'drop-zone-wrapper': true, 'hidden': element.hidden}">
             <div>
               <DropZoneLine
+                v-if="element.id !== 'placeholderFolder'"
                 :drag-start-element="currentFolderElement"
-                :idx="idx" />
+                :idx="idx"
+                @add-placeholder-folder="addPlaceholderFolder" />
+              <div v-else />
             </div>
             <BaseSlideBox
+              v-if="element.id !== 'placeholderFolder'"
               :id="element.id"
               :slides="element.items"
               :current-folder-element="currentFolderElement"
@@ -37,10 +41,17 @@
               @position-right="positionRight"
               @reorder-folder="reorderFolder"
               @switch-images="switchImages" />
+            <PlaceholderFolder
+              v-else
+              :idx="idx"
+              @remove-folder="removeFolder" />
             <div>
               <DropZoneLine
+                v-if="element.id !== 'placeholderFolder' "
                 :drag-start-element="currentFolderElement"
-                :idx="idx + 1" />
+                :idx="idx + 1"
+                @add-placeholder-folder="addPlaceholderFolder" />
+              <div v-else />
             </div>
           </div>
           <base-box-button
@@ -73,14 +84,16 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import ButtonMenu from '@/components/ButtonMenu';
 import albums from '@/albums';
 import BaseSlideBox from '@/components/BaseSlideBox/BaseSlideBox';
 import DropZoneLine from '@/components/BaseSlideBox/DropZoneLine';
+import PlaceholderFolder from '@/components/BaseSlideBox/PlaceholderFolder';
 
 export default {
   name: 'AlbumDetailView',
-  components: { DropZoneLine, BaseSlideBox, ButtonMenu },
+  components: { DropZoneLine, BaseSlideBox, ButtonMenu, PlaceholderFolder },
   emits: [
     'create-folder',
     'add-to-folder',
@@ -90,6 +103,8 @@ export default {
     'position-right',
     'reorder-folder',
     'switch-images',
+    'add-placeholder-folder',
+    'remove-folder',
   ],
   data() {
     let currentFolderElement;
@@ -114,12 +129,21 @@ export default {
   methods: {
     onDragStart(event) {
       this.currentFolderElement = event.srcElement.id;
-      this.currentFolderElementIsFull = this.album.folders.find(f => f.id === +event.srcElement.id.split('-')[0])?.items?.length === 2;
+      const currentFolder = this.album.folders.find(f => f.id === +event.srcElement.id.split('-')[0]);
+      this.album.folders.forEach((f) => { Vue.set(f, 'hidden', false); });
+      currentFolder.hidden = true;
+      // const dropZoneWrapper = event.srcElement.parentElement.parentElement;
+      // const dropZoneWrapperParent = dropZoneWrapper.parentElement;
+      // document.body.appendChild(dropZoneWrapper);
+      // dropZoneWrapperParent.removeChild(dropZoneWrapper);
+
+      this.currentFolderElementIsFull = currentFolder.items?.length === 2;
       console.log('DragStart: ', this.currentFolderElement);
     },
     onDragEnd() {
       this.currentFolderElement = null;
       this.currentFolderElementIsFull = null;
+      this.album.folders.forEach((f) => { Vue.set(f, 'hidden', false); });
     },
 
     onCreateFolder(ev) {
@@ -212,6 +236,35 @@ export default {
         this.album.folders.splice(ev.newIndex - 1, 0, targetFolder);
       }
     },
+    removeFolder(ev) {
+      console.log('Remove', ev);
+      const folderIndex = this.album.folders.findIndex(f => f.id === ev.folderID);
+      if (folderIndex > -1) {
+        console.log('Folder found: ', folderIndex);
+        this.album.folders.splice(folderIndex, 1);
+      }
+    },
+    addPlaceholderFolder(ev) {
+      const placeholderFolder = {
+        id: 'placeholderFolder',
+        items: [{
+          id: '1',
+
+        }],
+      };
+      if (!this.album.folders.find(f => f.id === 'placeholderFolder')) {
+        const folderIndex = this.album.folders.findIndex(f => f.id === +this.currentFolderElement.split('-')[0]);
+        console.log(ev.idx, folderIndex);
+        if (folderIndex > ev.idx) {
+        // swap from the right side
+          this.album.folders.splice(ev.idx, 0, placeholderFolder);
+        } else if (folderIndex < ev.idx) {
+        // swap from the left side
+          this.album.folders.splice(ev.idx, 0, placeholderFolder);
+        }
+      }
+    },
+
   },
 };
 </script>
@@ -221,6 +274,11 @@ export default {
   display: grid;
   height: 100%;
   grid-template-columns: 15px 100% 15px;
+  /* width: 300px; */
+  flex-grow: 1;
+}
+.drop-zone-wrapper.hidden {
+  opacity: 0.5;
 }
 
 small {
@@ -238,9 +296,12 @@ small {
 
 .draggable-list {
   display: grid;
-  justify-content: center;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 16px;
+    justify-content: flex-start;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    /* flex-direction: row;
+    flex-wrap: wrap; */
+    align-content: center;
 }
 
 .image-wrapper {
@@ -257,5 +318,7 @@ small {
 .box {
   margin-left: 15px;
   margin-right: -15px;
+  width: 300px;
+  flex-grow: 1;
 }
 </style>
