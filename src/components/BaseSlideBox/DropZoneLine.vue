@@ -1,7 +1,8 @@
 <template>
   <div
     :id="`dropZoneLine-${idx}`"
-    :class="{ 'drop-zone': true, 'drop-zone-color': isVisible }"
+    :class="{ 'drop-zone': true, 'drop-zone-color': isVisible,
+              'no-pointer-events': noPointerEvents }"
     @dragenter="onDragEnter"
     @dragleave="onDragLeave"
     @dragover="allowDrop"
@@ -16,6 +17,7 @@ export default {
     return {
       isVisible,
       placeholderTimeout: null,
+      noPointerEvents: false,
     };
   },
   methods: {
@@ -28,14 +30,17 @@ export default {
     onDragEnter() {
       this.isVisible = true;
       const currentVueComponent = this;
+      console.log('Entered DropZoneLine');
       this.placeholderTimeout = window.setTimeout(() => {
         console.log('Started timeout');
         currentVueComponent.$emit('add-placeholder-folder', { idx: currentVueComponent.idx });
-      }, 500);
+        // this.noPointerEvents = true;
+      }, 200);
     },
     onDragLeave() {
       this.isVisible = false;
       if (this.placeholderTimeout) { window.clearTimeout(this.placeholderTimeout); }
+
       // this.$emit('remove-folder', { folderID: 'placeholderFolder' });
     },
   },
@@ -44,14 +49,19 @@ export default {
 
 <style scoped>
 .drop-zone {
-  width: 10px;
+  width: 40px;
   height: 100%;
   display: flex;
   position: relative;
-  margin: 0 2.5px;
+  margin: 0 -12.5px;
+  z-index: 2;
 }
 
 .drop-zone.drop-zone-color {
-  background: #9c27b0;
+  background: transparent;
+}
+
+.no-pointer-events{
+  pointer-events: none;
 }
 </style>

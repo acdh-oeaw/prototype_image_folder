@@ -43,11 +43,11 @@
               @switch-images="switchImages" />
             <PlaceholderFolder
               v-else
-              style="background: #333"
+              :idx="idx"
               @remove-folder="removeFolder" />
             <div>
               <DropZoneLine
-                v-if="element.id !== 'placeholderFolder'"
+                v-if="element.id !== 'placeholderFolder' "
                 :drag-start-element="currentFolderElement"
                 :idx="idx + 1"
                 @add-placeholder-folder="addPlaceholderFolder" />
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { Vue } from 'vue';
+import Vue from 'vue';
 import ButtonMenu from '@/components/ButtonMenu';
 import albums from '@/albums';
 import BaseSlideBox from '@/components/BaseSlideBox/BaseSlideBox';
@@ -130,6 +130,7 @@ export default {
     onDragStart(event) {
       this.currentFolderElement = event.srcElement.id;
       const currentFolder = this.album.folders.find(f => f.id === +event.srcElement.id.split('-')[0]);
+      this.album.folders.forEach((f) => { Vue.set(f, 'hidden', false); });
       currentFolder.hidden = true;
       // const dropZoneWrapper = event.srcElement.parentElement.parentElement;
       // const dropZoneWrapperParent = dropZoneWrapper.parentElement;
@@ -259,7 +260,7 @@ export default {
           this.album.folders.splice(ev.idx, 0, placeholderFolder);
         } else if (folderIndex < ev.idx) {
         // swap from the left side
-          this.album.folders.splice(ev.idx - 1, 0, placeholderFolder);
+          this.album.folders.splice(ev.idx, 0, placeholderFolder);
         }
       }
     },
@@ -273,6 +274,8 @@ export default {
   display: grid;
   height: 100%;
   grid-template-columns: 15px 100% 15px;
+  /* width: 300px; */
+  flex-grow: 1;
 }
 .drop-zone-wrapper.hidden {
   opacity: 0.5;
@@ -293,9 +296,12 @@ small {
 
 .draggable-list {
   display: grid;
-  justify-content: center;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 16px;
+    justify-content: flex-start;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    /* flex-direction: row;
+    flex-wrap: wrap; */
+    align-content: center;
 }
 
 .image-wrapper {
@@ -312,5 +318,7 @@ small {
 .box {
   margin-left: 15px;
   margin-right: -15px;
+  width: 300px;
+  flex-grow: 1;
 }
 </style>

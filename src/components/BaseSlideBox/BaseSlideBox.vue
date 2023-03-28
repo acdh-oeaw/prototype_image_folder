@@ -156,6 +156,11 @@ export default {
           folderID: this.id,
           newIndex: +targetElement.id.replace('dropZoneLine-', ''),
         });
+      } else if (targetElement.id.startsWith('placeholderFolder')) {
+        this.$emit('reorder-folder', {
+          folderID: this.id,
+          newIndex: +targetElement.id.replace('placeholderFolder-', ''),
+        });
       } else {
         this.$emit('add-to-folder', {
           folderID: targetElement.id.split('-')[0],
