@@ -258,7 +258,7 @@ export default {
         if (folderIndex > ev.idx) {
         // swap from the right side
           this.album.folders.splice(ev.idx, 0, placeholderFolder);
-        } else if (folderIndex < ev.idx) {
+        } else if (folderIndex < ev.idx - 1) {
         // swap from the left side
           this.album.folders.splice(ev.idx, 0, placeholderFolder);
         }
