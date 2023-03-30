@@ -140,11 +140,11 @@ export default {
       // console.log(this.id);
       // console.log('onEnd Event:', ev, this.slides);
       const draggedElement = ev.item;
-      let targetElement = ev.explicitOriginalTarget;
+      let targetElement = ev.originalEvent.target;
       if (!targetElement) {
         targetElement = ev.originalEvent.toElement;
       }
-      console.log('Target ', targetElement);
+      console.log('Target ', targetElement, ev);
       if (targetElement.id === '' || targetElement.id === null) {
         console.log('Nothing');
       } else if (targetElement.id.endsWith('doubleImg')) {
