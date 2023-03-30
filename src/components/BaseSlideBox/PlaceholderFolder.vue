@@ -10,7 +10,9 @@
       :class="{'border-element': true, 'dragclass': dragclass}"
       @dragover="allowDrop"
       @dragenter="addClass"
-      @dragleave="removeClass" />
+      @dragleave="removeClass">
+      Folie verschieben
+    </div>
   </div>
 </template>
 <script>
@@ -54,6 +56,10 @@ export default {
 .placeholder-folder .border-element{
   border: 4px solid var(--app-color);
   height: 100%;
+  text-align: center;
+  align-content: center;
+  color: var(--app-color);
+  display: grid;
 }
 .placeholder-folder .dragclass{
   background-color: #d4d4d499
@@ -65,4 +71,5 @@ export default {
     position: relative;
     background-color: transparent;
 }
+
 </style>

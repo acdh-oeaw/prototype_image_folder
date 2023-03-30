@@ -14,66 +14,74 @@
         @dragstart="onDragStart"
         @dragend="onDragEnd">
         <div class="draggable-list">
-          <div
-            v-for="(element, idx) in album.folders"
-            :id="element.id"
-            :key="element.id"
-            :class="{'drop-zone-wrapper': true, 'hidden': element.hidden}">
-            <div>
-              <DropZoneLine
-                v-if="element.id !== 'placeholderFolder'"
-                :drag-start-element="currentFolderElement"
-                :idx="idx"
-                @add-placeholder-folder="addPlaceholderFolder" />
-              <div v-else />
-            </div>
-            <BaseSlideBox
-              v-if="element.id !== 'placeholderFolder'"
+          <TransitionGroup
+            tag="ul"
+            name="fade"
+            class="container">
+            <div
+              v-for="(element, idx) in album.folders"
               :id="element.id"
-              :slides="element.items"
-              :current-folder-element="currentFolderElement"
-              :current-folder-element-is-full="currentFolderElementIsFull"
-              @create-folder="onCreateFolder"
-              @add-to-folder="onAddToFolder"
-              @remove-from-folder="onRemoveFromFolder"
-              @split-images="splitImages"
-              @position-left="positionLeft"
-              @position-right="positionRight"
-              @reorder-folder="reorderFolder"
-              @switch-images="switchImages" />
-            <PlaceholderFolder
-              v-else
-              :idx="idx"
-              @remove-folder="removeFolder" />
-            <div>
-              <DropZoneLine
-                v-if="element.id !== 'placeholderFolder' "
-                :drag-start-element="currentFolderElement"
-                :idx="idx + 1"
-                @add-placeholder-folder="addPlaceholderFolder" />
-              <div v-else />
+              :key="element.id"
+              :class="{'drop-zone-wrapper': true, 'hidden': element.hidden}">
+              <div>
+                <DropZoneLine
+                  v-if="element.id !== 'placeholderFolder'"
+                  :drag-start-element="currentFolderElement"
+                  :idx="idx"
+                  @add-placeholder-folder="addPlaceholderFolder" />
+                <div v-else />
+              </div>
+              <BaseSlideBox
+                v-if="element.id !== 'placeholderFolder'"
+                :id="element.id"
+                :slides="element.items"
+                :current-folder-element="currentFolderElement"
+                :current-folder-element-is-full="currentFolderElementIsFull"
+                @create-folder="onCreateFolder"
+                @add-to-folder="onAddToFolder"
+                @remove-from-folder="onRemoveFromFolder"
+                @split-images="splitImages"
+                @position-left="positionLeft"
+                @position-right="positionRight"
+                @reorder-folder="reorderFolder"
+                @switch-images="switchImages" />
+              <PlaceholderFolder
+                v-else
+                :idx="idx"
+                @remove-folder="removeFolder" />
+              <div>
+                <DropZoneLine
+                  v-if="element.id !== 'placeholderFolder' "
+                  :drag-start-element="currentFolderElement"
+                  :idx="idx + 1"
+                  @add-placeholder-folder="addPlaceholderFolder" />
+                <div v-else />
+              </div>
             </div>
-          </div>
-          <base-box-button
-            icon="plus"
-            text="Neues Kunstwerk zur Arbeitsmappe hinzufügen"
-            :show-title="false"
-            :box-size="{ width: 'unset' }"
-            class="box" />
+            <base-box-button
+              :key="'plus-button-box'"
+              icon="plus"
+              text="Neues Kunstwerk zur Arbeitsmappe hinzufügen"
+              :show-title="false"
+              :box-size="{ width: 'unset' }"
+              class="box" />
 
-          <base-box-button
-            icon="download"
-            text="Arbeitsmappe herunterladen"
-            :show-title="false"
-            :box-size="{ width: 'unset' }"
-            class="box" />
-          <base-box-button
-            icon="people"
-            box-style="large"
-            text="Personen zum Bearbeiten einladen"
-            :show-title="false"
-            :box-size="{ width: 'unset' }"
-            class="box" />
+            <base-box-button
+              :key="'download-button-box'"
+              icon="download"
+              text="Arbeitsmappe herunterladen"
+              :show-title="false"
+              :box-size="{ width: 'unset' }"
+              class="box" />
+            <base-box-button
+              :key="'people-button-box'"
+              icon="people"
+              box-style="large"
+              text="Personen zum Bearbeiten einladen"
+              :show-title="false"
+              :box-size="{ width: 'unset' }"
+              class="box" />
+          </TransitionGroup>
         </div>
       </div>
     </div>
@@ -320,5 +328,48 @@ small {
   margin-right: -15px;
   width: 300px;
   flex-grow: 1;
+}
+
+.container {
+  position: relative;
+  padding: 0;
+  display: grid;
+    justify-content: flex-start;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    /* flex-direction: row;
+    flex-wrap: wrap; */
+    align-content: center;
+}
+
+.item {
+  width: 100%;
+  height: 30px;
+  background-color: #f3f3f3;
+  border: 1px solid #666;
+  box-sizing: border-box;
+}
+
+/* 1. declare transition */
+.fade-move,
+.fade-enter-active {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+.fade-leave-active{
+  transition: none;
+}
+
+/* 2. declare enter from and leave to state */
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+.fade-leave-active {
+  position: absolute;
+  opacity: 0;
 }
 </style>
