@@ -199,7 +199,7 @@ export default {
   display: grid;
   grid-template-rows: 3fr 1fr;
   height: 100%;
-  cursor: pointer;
+  /* cursor: pointer; */
 
   & img {
     height: 100%;
@@ -221,6 +221,7 @@ export default {
   height: 75%;
   position: absolute;
   pointer-events: none;
+  z-index: 2;
 }
 
 .icon-wrapper {

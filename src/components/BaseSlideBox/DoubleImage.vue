@@ -80,7 +80,7 @@ export default {
   display: grid;
   grid-template-rows: 3fr 1fr;
   height: 100%;
-  cursor: pointer;
+  /* cursor: pointer; */
   position: relative;
 
   & img {

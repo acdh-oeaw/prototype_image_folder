@@ -373,3 +373,9 @@ small {
   opacity: 0;
 }
 </style>
+<style>
+.lucide-icon{
+  z-index: 2;
+  cursor: pointer;
+}
+</style>
