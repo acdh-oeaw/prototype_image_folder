@@ -25,9 +25,13 @@
               :class="{'drop-zone-wrapper': true, 'hidden': element.hidden}">
               <div>
                 <DropZoneLine
-                  v-if="element.id !== 'placeholderFolder'"
+                  v-if="element.id !== 'placeholderFolder' &&
+                    (album.folders[idx - 1] || {}).id !== 'placeholderFolder'"
                   :drag-start-element="currentFolderElement"
                   :idx="idx"
+                  :is-visible="currentFolderElement &&
+                    draggedFolderIndex != idx &&
+                    draggedFolderIndex != idx-1"
                   @add-placeholder-folder="addPlaceholderFolder" />
                 <div v-else />
               </div>
@@ -51,9 +55,13 @@
                 @remove-folder="removeFolder" />
               <div>
                 <DropZoneLine
-                  v-if="element.id !== 'placeholderFolder' "
+                  v-if="element.id !== 'placeholderFolder' &&
+                    (album.folders[idx + 1] || {}).id !== 'placeholderFolder'"
                   :drag-start-element="currentFolderElement"
                   :idx="idx + 1"
+                  :is-visible="currentFolderElement &&
+                    draggedFolderIndex != idx &&
+                    draggedFolderIndex != idx+1"
                   @add-placeholder-folder="addPlaceholderFolder" />
                 <div v-else />
               </div>
@@ -133,6 +141,10 @@ export default {
         ghostClass: 'ghost',
       };
     },
+    draggedFolderIndex() {
+      if (!this.currentFolderElement) { return -1; }
+      return this.album.folders.findIndex(f => f.id === +this.currentFolderElement.split('-')[0]);
+    },
   },
   methods: {
     onDragStart(event) {
@@ -140,6 +152,7 @@ export default {
       const currentFolder = this.album.folders.find(f => f.id === +event.srcElement.id.split('-')[0]);
       this.album.folders.forEach((f) => { Vue.set(f, 'hidden', false); });
       currentFolder.hidden = true;
+      console.log(this.currentFolderElement);
       // const dropZoneWrapper = event.srcElement.parentElement.parentElement;
       // const dropZoneWrapperParent = dropZoneWrapper.parentElement;
       // document.body.appendChild(dropZoneWrapper);
@@ -306,7 +319,7 @@ small {
   display: grid;
     justify-content: flex-start;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 16px;
+    gap: 15px;
     /* flex-direction: row;
     flex-wrap: wrap; */
     align-content: center;
