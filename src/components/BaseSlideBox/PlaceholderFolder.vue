@@ -6,12 +6,16 @@
     @dragleave="onDragLeave"
     @drop="onDrop">
     <div
-      :id="`placeholderFolder-${idx}`"
-      :class="{'border-element': true, 'dragclass': dragclass}"
-      @dragover="allowDrop"
-      @dragenter="addClass"
-      @dragleave="removeClass">
-      Folie verschieben
+      :id="`placeholderFolderOuter-${idx}`"
+      class="folder-drop-zone"
+      @dragover="allowDrop">
+      <div
+        :id="`placeholderFolderInner-${idx}`"
+        :class="{'border-element': true, 'dragclass': dragclass}"
+        @dragenter="addClass"
+        @dragleave="removeClass">
+        Folie verschieben
+      </div>
     </div>
   </div>
 </template>
@@ -37,7 +41,7 @@ export default {
       this.counter -= 1;
       if (this.counter === 0) {
         console.log('Placeholder folder drag leave');
-        this.$emit('remove-folder', { folderID: 'placeholderFolder' });
+        // this.$emit('remove-folder', { folderID: 'placeholderFolder' });
       }
     },
     addClass() {
@@ -64,9 +68,13 @@ export default {
 .placeholder-folder .dragclass{
   background-color: #d4d4d499
 }
+.placeholder-folder .folder-drop-zone{
+  padding: 0 15px;
+  height: 100%;
+}
 .placeholder-folder{
   margin: 0 -100px;
-    padding: 0 100px;
+    padding: 0 85px;
     z-index: 3;
     position: relative;
     background-color: transparent;

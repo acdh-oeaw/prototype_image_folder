@@ -159,7 +159,7 @@ export default {
       } else if (targetElement.id.startsWith('placeholderFolder')) {
         this.$emit('reorder-folder', {
           folderID: this.id,
-          newIndex: +targetElement.id.replace('placeholderFolder-', ''),
+          newIndex: +targetElement.id.split('-').slice(1).join(''),
         });
       } else {
         this.$emit('add-to-folder', {
