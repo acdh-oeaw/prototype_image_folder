@@ -172,6 +172,7 @@ export default {
           item: this.slides.find(s => s.id === draggedElement.id.split('-')[1]),
         });
       }
+      this.$emit('on-drag-end');
     },
     splitImages() {
       this.$emit('split-images', { folderID: this.id });

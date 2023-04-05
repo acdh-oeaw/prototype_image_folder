@@ -41,7 +41,7 @@ export default {
       this.counter -= 1;
       if (this.counter === 0) {
         console.log('Placeholder folder drag leave');
-        // this.$emit('remove-folder', { folderID: 'placeholderFolder' });
+        this.$emit('remove-folder', { folderID: 'placeholderFolder' });
       }
     },
     addClass() {

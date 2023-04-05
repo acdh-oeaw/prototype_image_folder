@@ -48,7 +48,8 @@
                 @position-left="positionLeft"
                 @position-right="positionRight"
                 @reorder-folder="reorderFolder"
-                @switch-images="switchImages" />
+                @switch-images="switchImages"
+                @on-drag-end="onDragEnd" />
               <PlaceholderFolder
                 v-else
                 :idx="idx"
@@ -121,6 +122,7 @@ export default {
     'switch-images',
     'add-placeholder-folder',
     'remove-folder',
+    'on-drag-end',
   ],
   data() {
     let currentFolderElement;
@@ -162,9 +164,11 @@ export default {
       console.log('DragStart: ', this.currentFolderElement);
     },
     onDragEnd() {
+      console.log('DRAG END');
       this.currentFolderElement = null;
       this.currentFolderElementIsFull = null;
       this.album.folders.forEach((f) => { Vue.set(f, 'hidden', false); });
+      this.removeFolder({ folderID: 'placeholderFolder' });
     },
 
     onCreateFolder(ev) {

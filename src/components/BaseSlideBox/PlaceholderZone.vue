@@ -31,22 +31,22 @@ export default {
     console.log('New placeholder zone created');
   },
   methods: {
-    onDragEnter(ev) {
+    onDragEnter() {
       console.log('placeholderzone entered');
       if (this.dragStartElement === '' || (this.dragStartElement.split('-')[0] === this.id.split('-')[0] && !this.dragStartElement.endsWith('doubleImg'))) {
         return;
       }
       this.dragCounter += 1;
       this.isVisible = true;
-      ev.stopPropagation();
+      // ev.stopPropagation();
     },
-    onDragLeave(ev) {
+    onDragLeave() {
       this.dragCounter -= 1;
       if (this.dragCounter === 0) {
         console.log('placeholderzone left');
         this.isVisible = false;
       }
-      ev.stopPropagation();
+      // ev.stopPropagation();
     },
     onDrop() {
       this.dragCounter = 0;
