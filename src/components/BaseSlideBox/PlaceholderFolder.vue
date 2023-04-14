@@ -51,7 +51,7 @@ export default {
       this.dragclass = false;
     },
     onDrop() {
-      this.$emit('remove-folder', { folderID: 'placeholderFolder' });
+      window.setTimeout(() => this.$emit('remove-folder', { folderID: 'placeholderFolder' }), 500);
     },
   },
 };

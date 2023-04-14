@@ -22,7 +22,8 @@
               v-for="(element, idx) in album.folders"
               :id="element.id"
               :key="element.id"
-              :class="{'drop-zone-wrapper': true, 'hidden': element.hidden}">
+              :class="{'drop-zone-wrapper': true, 'hidden': element.hidden,
+                       'noTransition': element.noTransition}">
               <div>
                 <DropZoneLine
                   v-if="element.id !== 'placeholderFolder' &&
@@ -150,10 +151,21 @@ export default {
   },
   methods: {
     onDragStart(event) {
+      console.log(event);
+      const cloneElement = event.srcElement.cloneNode(true);
+      cloneElement.style.position = 'absolute';
+      cloneElement.style.height = `${event.srcElement.getBoundingClientRect().height}px`;
+      cloneElement.style.width = `${event.srcElement.getBoundingClientRect().width}px`;
+      console.log(cloneElement);
+      document.body.appendChild(cloneElement);
+
+      event.dataTransfer.setDragImage(cloneElement, 0, 0);
       this.currentFolderElement = event.srcElement.id;
       const currentFolder = this.album.folders.find(f => f.id === +event.srcElement.id.split('-')[0]);
       this.album.folders.forEach((f) => { Vue.set(f, 'hidden', false); });
       currentFolder.hidden = true;
+      this.album.folders.forEach((f) => { Vue.set(f, 'noTransition', false); });
+      currentFolder.noTransition = true;
       console.log(this.currentFolderElement);
       // const dropZoneWrapper = event.srcElement.parentElement.parentElement;
       // const dropZoneWrapperParent = dropZoneWrapper.parentElement;
@@ -168,6 +180,10 @@ export default {
       this.currentFolderElement = null;
       this.currentFolderElementIsFull = null;
       this.album.folders.forEach((f) => { Vue.set(f, 'hidden', false); });
+      window.setTimeout(() => {
+        this.album.folders.forEach((f) => { Vue.set(f, 'noTransition', false); });
+      }, 500);
+
       this.removeFolder({ folderID: 'placeholderFolder' });
     },
 
@@ -304,6 +320,11 @@ export default {
 }
 .drop-zone-wrapper.hidden {
   opacity: 0.5;
+  display: none;
+  transition: none !important;
+}
+.drop-zone-wrapper.noTransition {
+  transition: none !important;
 }
 
 small {
