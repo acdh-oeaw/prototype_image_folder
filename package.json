@@ -2,10 +2,10 @@
   "name": "base-ui-test",
   "private": true,
   "scripts": {
-    "build": "echo 'no build atm'",
+    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "serve": "vue-cli-service serve",
-    "start": "vue-cli-service serve --public https://image-folder.acdh-ch-dev.oeaw.ac.at",
+    "start": "vite preview --host",
     "test": "echo 'no tests'"
   },
   "dependencies": {
