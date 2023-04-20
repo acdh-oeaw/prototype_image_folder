@@ -152,14 +152,14 @@ export default {
   methods: {
     onDragStart(event) {
       console.log(event);
-      const cloneElement = event.srcElement.cloneNode(true);
-      cloneElement.style.position = 'absolute';
-      cloneElement.style.height = `${event.srcElement.getBoundingClientRect().height}px`;
-      cloneElement.style.width = `${event.srcElement.getBoundingClientRect().width}px`;
-      console.log(cloneElement);
-      document.body.appendChild(cloneElement);
+      // const cloneElement = event.srcElement.cloneNode(true);
+      // cloneElement.style.position = 'absolute';
+      // cloneElement.style.height = `${event.srcElement.getBoundingClientRect().height}px`;
+      // cloneElement.style.width = `${event.srcElement.getBoundingClientRect().width}px`;
+      // console.log(cloneElement);
+      // document.body.appendChild(cloneElement);
 
-      event.dataTransfer.setDragImage(cloneElement, 0, 0);
+      // event.dataTransfer.setDragImage(cloneElement, 0, 0);
       this.currentFolderElement = event.srcElement.id;
       const currentFolder = this.album.folders.find(f => f.id === +event.srcElement.id.split('-')[0]);
       this.album.folders.forEach((f) => { Vue.set(f, 'hidden', false); });
@@ -320,7 +320,6 @@ export default {
 }
 .drop-zone-wrapper.hidden {
   opacity: 0.5;
-  display: none;
   transition: none !important;
 }
 .drop-zone-wrapper.noTransition {
