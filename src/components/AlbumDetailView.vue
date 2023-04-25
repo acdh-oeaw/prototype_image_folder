@@ -94,6 +94,9 @@
           </TransitionGroup>
         </div>
       </div>
+      <FileImage
+        id="fileImageIcon"
+        style="fill: white; height: 30px; width: 30px; top: -100px; position: absolute" />
     </div>
     <div v-else>
       <p>Nothing found!</p>
@@ -103,6 +106,7 @@
 
 <script>
 import Vue from 'vue';
+import { FileImage } from 'lucide-vue';
 import ButtonMenu from '@/components/ButtonMenu';
 import albums from '@/albums';
 import BaseSlideBox from '@/components/BaseSlideBox/BaseSlideBox';
@@ -111,7 +115,7 @@ import PlaceholderFolder from '@/components/BaseSlideBox/PlaceholderFolder';
 
 export default {
   name: 'AlbumDetailView',
-  components: { DropZoneLine, BaseSlideBox, ButtonMenu, PlaceholderFolder },
+  components: { DropZoneLine, BaseSlideBox, ButtonMenu, PlaceholderFolder, FileImage },
   emits: [
     'create-folder',
     'add-to-folder',
@@ -152,7 +156,7 @@ export default {
   methods: {
     onDragStart(event) {
       console.log(event);
-      // const cloneElement = event.srcElement.cloneNode(true);
+      // const placeholderElement = event.srcElement.cloneNode(true);
       // cloneElement.style.position = 'absolute';
       // cloneElement.style.height = `${event.srcElement.getBoundingClientRect().height}px`;
       // cloneElement.style.width = `${event.srcElement.getBoundingClientRect().width}px`;
@@ -160,16 +164,45 @@ export default {
       // cloneElement.id = 'cloneElement';
       // console.log(cloneElement);
       // document.body.appendChild(cloneElement);
-
-      // event.dataTransfer.setDragImage(cloneElement, 0, 0);
+      console.log(FileImage);
+      event.dataTransfer.setDragImage(document.getElementById('fileImageIcon'), 0, 0);
       this.currentFolderElement = event.srcElement.id;
       const currentFolder = this.album.folders.find(f => f.id === +event.srcElement.id.split('-')[0]);
-      this.album.folders.forEach((f) => { Vue.set(f, 'hidden', false); });
-      currentFolder.hidden = true;
+
       this.album.folders.forEach((f) => { Vue.set(f, 'noTransition', false); });
       currentFolder.noTransition = true;
       console.log(this.currentFolderElement);
-      // const dropZoneWrapper = event.srcElement.parentElement.parentElement;
+
+      if (currentFolder.items.length === 2) {
+        let draggedBaseBox = event.srcElement;
+        while (!draggedBaseBox.classList.contains('base-box') && draggedBaseBox.parentElement) { draggedBaseBox = draggedBaseBox.parentElement; }
+        draggedBaseBox.parentElement.style.position = 'relative';
+        const dropZoneWrapper = document.createElement('div');
+        dropZoneWrapper.id = 'dropZoneWrapper';
+        // dropZoneWrapper.style.margin = '10px';
+        dropZoneWrapper.style.position = 'absolute';
+        dropZoneWrapper.style.height = `calc(${draggedBaseBox.getBoundingClientRect().height}px + 20px)`;
+        dropZoneWrapper.style.width = `calc(${draggedBaseBox.getBoundingClientRect().width}px + 20px)`;
+        dropZoneWrapper.style.top = '-10px';
+        dropZoneWrapper.style.left = '-10px';
+        draggedBaseBox.parentElement.style.zIndex = 5;
+        console.log(draggedBaseBox);
+        dropZoneWrapper.addEventListener('dragleave', (ev) => {
+          console.log('Leave draggedbasebox outer', ev.target, draggedBaseBox.parentElement);
+          if (ev.target === dropZoneWrapper) {
+            console.log('Leave draggedbasebox inner', ev);
+            this.album.folders.forEach((f) => { Vue.set(f, 'hidden', false); });
+            currentFolder.hidden = true;
+          }
+        });
+        draggedBaseBox.parentElement.appendChild(dropZoneWrapper);
+      } else {
+        this.album.folders.forEach((f) => { Vue.set(f, 'hidden', false); });
+        currentFolder.hidden = true;
+      }
+
+      // dropZoneWrapper.remove();
+
       // const dropZoneWrapperParent = dropZoneWrapper.parentElement;
       // document.body.appendChild(dropZoneWrapper);
       // dropZoneWrapperParent.removeChild(dropZoneWrapper);
@@ -187,7 +220,7 @@ export default {
       }, 500);
 
       this.removeFolder({ folderID: 'placeholderFolder' });
-      // document.getElementById('cloneElement').remove();
+      document.getElementById('dropZoneWrapper')?.remove();
     },
 
     onCreateFolder(ev) {

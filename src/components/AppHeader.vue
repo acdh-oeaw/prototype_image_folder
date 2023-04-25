@@ -10,13 +10,12 @@
       <div class="display-items">
         <base-drop-down
           class="drop-down"
-          placeholder="Olivia Reichl" />
+          placeholder="Max Mustermann" />
         <BaseButton
           text="Image+"
           button-style="row"
           :active="true"
-          icon="subscribe"
-          icon-colored="true" />
+          icon="subscribe" />
         <BaseButton
           text="Recherche"
           button-style="row"
